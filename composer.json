@@ -1,14 +1,14 @@
 {
     "require": {
-        "php":">=5.3.0",
-        "zendframework/zendframework1" : "~1.12",
-        "smarty/smarty":"3.1.*",
+        "php": ">=5.3.0",
+        "zendframework/zendframework1": "~1.12",
+        "smarty/smarty": "3.1.*",
         "doctrine/orm": "*"
     },
 
     "minimum-stability": "dev",
     "config": {
-        "process-timeout":600,
+        "process-timeout": 600,
         "vendor-dir": "../vendor"
     }
 }
