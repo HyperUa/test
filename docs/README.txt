@@ -14,13 +14,13 @@ Setting Up Your VHOST
 The following is a sample VHOST you might want to consider for your project.
 
 <VirtualHost *:80>
-   DocumentRoot "/var/www/task/test/public"
-   ServerName test.local
+   DocumentRoot "/var/www/task/test1/public"
+   ServerName test1.local
 
    # This should be omitted in the production environment
    SetEnv APPLICATION_ENV development
 
-   <Directory "/var/www/task/test/public">
+   <Directory "/var/www/task/test1/public">
        Options Indexes MultiViews FollowSymLinks
        AllowOverride All
        Order allow,deny

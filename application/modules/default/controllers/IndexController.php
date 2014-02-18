@@ -11,22 +11,15 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         // action body
+        //d('Hello = indexAction');
+        $this->view->hello = 'Hello Smarty';
     }
 
-    public function newAction(){
-
+    public function addAction()
+    {
+        d('Hello = addAction');
     }
 
-    public function removeAction(){
 
-    }
-
-    public function editAction(){
-
-    }
-
-    public function viewAction(){
-
-    }
 }
 
