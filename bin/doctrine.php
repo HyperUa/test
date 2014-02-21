@@ -1,11 +1,15 @@
 <?php
+$myproj = dirname(__FILE__) . '/../../';
+$vendor = $myproj . 'vendor/';
+$webapp = $myproj . 'webapp/';
 
-require_once(dirname(__FILE__) . '/../../vendor/autoload.php');
+
+require_once($vendor . 'autoload.php');
 
 
 define('APPLICATION_ENV', 'development');
 
-define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
+define('APPLICATION_PATH', ($webapp . 'application'));
 
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../library'),
@@ -13,16 +17,17 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 
-$classLoader = new \Doctrine\Common\ClassLoader('Doctrine', APPLICATION_PATH . '/../library');
+$classLoader = new \Doctrine\Common\ClassLoader(
+    'Repository',
+    APPLICATION_PATH
+);
 $classLoader->register();
-$classLoader = new \Doctrine\Common\ClassLoader('Symfony', APPLICATION_PATH . '/../library/Doctrine');
-$classLoader->register();
-$classLoader = new \Doctrine\Common\ClassLoader('Entities', APPLICATION_PATH . '/models');
-$classLoader->setNamespaceSeparator('_');
+$classLoader = new \Doctrine\Common\ClassLoader(
+    'Entities',
+    APPLICATION_PATH
+);
 $classLoader->register();
 
-// Zend Components
-require_once 'Zend/Application.php';
 
 // Create application
 $application = new Zend_Application(

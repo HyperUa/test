@@ -1,7 +1,5 @@
 <?php
 
-require_once '../library/Smarty/View.php';
-
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
@@ -41,67 +39,58 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 
     /**
-     * Регистрация пространства имен Default_
-     * @return Zend_Application_Module_Autoloader
-     */
-    protected function _initAutoload()
-    {
-        $autoloader = new Zend_Application_Module_Autoloader(array(
-            'namespace' => '',
-            'basePath' => dirname(__FILE__),
-        ));
-        return $autoloader;
-    }
-
-    /**
      * Init Doctrine
      * @return Doctrine_Manager
      */
     public function _initDoctrine()
     {
-        // Подключение класс-лоадера
-        //require_once('Doctrine/Common/ClassLoader.php');
+        $connectionSettings = $this->getOption('doctrine');
+
+
         $classLoader = new \Doctrine\Common\ClassLoader(
-            'Doctrine',
-            APPLICATION_PATH . '/../library/'
+            'Repository',
+            APPLICATION_PATH
+        );
+        $classLoader->register();
+        $classLoader = new \Doctrine\Common\ClassLoader(
+            'Entities',
+            APPLICATION_PATH
         );
         $classLoader->register();
 
-        // Создание конфигурации Doctrine
+
         $config = new \Doctrine\ORM\Configuration();
 
-        // Настройка кеша (используется ArrayCache)
         $cache = new \Doctrine\Common\Cache\ArrayCache;
         $config->setMetadataCacheImpl($cache);
         $config->setQueryCacheImpl($cache);
 
-        // Устанавлмваем драйвер для схемы БД
-        // Будем использовать аннотации
+
         $driver = $config->newDefaultAnnotationDriver(
-            APPLICATION_PATH . '/models'
+            $connectionSettings['path']['models'],
+            $connectionSettings['path']['simpleDriver']
         );
+
         $config->setMetadataDriverImpl($driver);
 
-        // Прокси
-        $config->setProxyDir(APPLICATION_PATH . '/models/Proxies');
-        $config->setAutoGenerateProxyClasses(true);
-        $config->setProxyNamespace('App\Proxies');
 
-        // Создаем EntityManager
-        // с параметрами из application.ini
-        $connectionSettings = $this->getOption('doctrine');
+        $config->setProxyDir(APPLICATION_PATH . '/Entities/Proxies');
+        $config->setAutoGenerateProxyClasses(true);
+        $config->setProxyNamespace('Proxies');
+
         $conn = array(
-            'driver' => $connectionSettings['conn']['driv'],
-            'user' => $connectionSettings['conn']['user'],
+            'driver'   => $connectionSettings['conn']['driv'],
+            'user'     => $connectionSettings['conn']['user'],
             'password' => $connectionSettings['conn']['pass'],
-            'dbname' => $connectionSettings['conn']['dbname'],
-            'host' => $connectionSettings['conn']['host']
+            'dbname'   => $connectionSettings['conn']['dbname'],
+            'host'     => $connectionSettings['conn']['host']
         );
         $entityManager = \Doctrine\ORM\EntityManager::create($conn, $config);
 
-        // Сохраним менеджер в реестре
+
         $registry = Zend_Registry::getInstance();
         $registry->entitymanager = $entityManager;
+
 
         return $entityManager;
     }
