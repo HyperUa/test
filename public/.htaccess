@@ -21,4 +21,8 @@ RewriteRule ^.*$ index.php [NC,L]
 
 SetEnv APPLICATION_ENV development
 
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-store, no-cache"
+</IfModule>
+
 
