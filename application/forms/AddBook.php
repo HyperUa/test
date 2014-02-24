@@ -1,6 +1,6 @@
 <?php
 
-class Form_AddBook extends Zend_Form
+class Form_AddBook extends Task_Form
 {
     const ERR_EMPTY_TITLE = 'Введите название книги';
     const ERR_EMPTY_GENRE = 'Выберите как минимум 1 жанр';
@@ -58,7 +58,21 @@ class Form_AddBook extends Zend_Form
 
             $this->addElement($inputAuthor);
         }
-
+d(APPLICATION_PATH);
+        $file = new Zend_Form_Element_File('file');
+        $file->setLabel('Добавить книгу')
+            ->setDestination(BASE_PATH . '/data/uploads')
+            ->setRequired(true)
+            ->setValidators(
+                array(
+                    array(
+                        'NotEmpty',
+                        true,
+                        array('messages' => array(Zend_Validate_NotEmpty::IS_EMPTY => self::ERR_EMPTY_TITLE))
+                    ),
+                )
+            );;
+        $this->addElement($file);
 
         $this->addElement('submit', 'add', array(
             'label' => 'Добавить'
@@ -92,5 +106,26 @@ class Form_AddBook extends Zend_Form
 
         }
         return $isValid;
+    }
+
+    public function populateEntity($entity){
+
+        $data = $this->convertEntityToArray($entity);
+
+        $genres = $entity->getGenre();
+        if($genres->count() >0){
+            foreach($genres as $genre){
+                $data['genres'][] = $genre->getId();
+            }
+        }
+
+        $authors = $entity->getAuthor();
+        if($authors->count() >0){
+            foreach($authors as $author){
+                $data['authors'][] = $genre->getId();
+            }
+        }
+
+        return parent::populate($data);
     }
 }
