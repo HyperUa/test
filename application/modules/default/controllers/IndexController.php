@@ -3,16 +3,19 @@
 
 class IndexController extends Task_Controller_Action
 {
+    const COUNT_PER_PAGE = 2;
 
-    public function preDispatch(){
+
+    public function preDispatch()
+    {
         parent::preDispatch();
 
         $this->id = $this->_request->get('id');
 
-        if($this->id){
+        if ($this->id) {
             $book = Task_Service::getRepository('books')->findById($this->id);
 
-            if(!$book[0] instanceof \Entities\Books){
+            if (!$book[0] instanceof \Entities\Books) {
                 $this->addFlashMessage('Книга не была найдена');
                 $this->goToHome();
             }
@@ -23,9 +26,26 @@ class IndexController extends Task_Controller_Action
 
     public function indexAction()
     {
-        $books = $this->getEntityManager()->getRepository('Entities\Books')->findAll();
+        $page = $this->getRequest()->getParam('page', 1);
 
-        $this->view->books = $books;
+
+        $dql = "SELECT b FROM Entities\\Books b";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $d2Paginator = new Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        $d2PaginatorIter = $d2Paginator->getIterator();
+
+
+        $adapter = new \Zend_Paginator_Adapter_Iterator($d2PaginatorIter);
+
+        $zendPaginator = new \Zend_Paginator($adapter);
+
+        $zendPaginator->setItemCountPerPage(self::COUNT_PER_PAGE)
+            ->setCurrentPageNumber($page);
+
+        $this->view->paginator = $zendPaginator;
+
     }
 
 
@@ -40,11 +60,13 @@ class IndexController extends Task_Controller_Action
     }
 
 
-    public function downloadAction(){
+    public function downloadAction()
+    {
 
     }
 
-    public function deleteAction(){
+    public function deleteAction()
+    {
 
         Task_Service::getEntityManager()->remove($this->book);
         Task_Service::getEntityManager()->flush();
@@ -54,12 +76,13 @@ class IndexController extends Task_Controller_Action
     }
 
 
-    protected function _bookEdit($book, $type = 'new'){
+    protected function _bookEdit($book, $type = 'new')
+    {
 
         $form = $this->_getAddForm();
 
 
-        if($type == 'edit'){
+        if ($type == 'edit') {
             $form->populateEntity($book);
         }
 
@@ -67,7 +90,7 @@ class IndexController extends Task_Controller_Action
 
             $formData = $this->_request->getPost();
 
-            if($form->isValid($formData)){
+            if ($form->isValid($formData)) {
 
                 $book->setName($form->getValue('name'));
                 $book->setUserId(1);
@@ -79,21 +102,21 @@ class IndexController extends Task_Controller_Action
                 //Removing Old Genres
                 $currentGenres = $book->getGenre();
 
-                if($currentGenres->count() > 0 ){
-                    foreach($currentGenres as $currentGenre){
-                        if(in_array($currentGenre->getId(), $genres)){
+                if ($currentGenres->count() > 0) {
+                    foreach ($currentGenres as $currentGenre) {
+                        if (in_array($currentGenre->getId(), $genres)) {
                             unset($genres[array_search($currentGenre->getId(), $genres)]);
-                        }else{
+                        } else {
                             $book->removeGenre($currentGenre);
                         }
                     }
                 }
 
                 //Write New Genres
-                foreach($genres as $genre){
+                foreach ($genres as $genre) {
                     $genreObj = Task_Service::getRepository('genres')->findById($genre);
 
-                    if($genreObj[0] instanceof \Entities\Genres){
+                    if ($genreObj[0] instanceof \Entities\Genres) {
                         $book->addGenre($genreObj[0]);
                     }
                 }
@@ -105,33 +128,33 @@ class IndexController extends Task_Controller_Action
                 //Removing Old Authors
                 $currentAuthors = $book->getAuthor();
 
-                if($currentAuthors->count() > 0 ){
-                    foreach($currentAuthors as $currentAuthor){
-                        if(in_array($currentAuthor->getId(), $genres)){
+                if ($currentAuthors->count() > 0) {
+                    foreach ($currentAuthors as $currentAuthor) {
+                        if (in_array($currentAuthor->getId(), $genres)) {
                             unset($authors[array_search($currentAuthor->getId(), $authors)]);
-                        }else{
+                        } else {
                             $book->removeAuthor($currentAuthor);
                         }
                     }
                 }
 
                 //Write New Authors
-                foreach($authors as $author){
+                foreach ($authors as $author) {
                     $authObj = Task_Service::getRepository('authors')->findById($author);
 
-                    if($authObj[0] instanceof \Entities\Authors){
+                    if ($authObj[0] instanceof \Entities\Authors) {
                         $book->addAuthor($authObj[0]);
                     }
                 }
 
-                if($type == 'edit'){
+                if ($type == 'edit') {
                     Task_Service::getEntityManager()->persist($book);
                 }
                 Task_Service::getEntityManager()->flush();
 
                 $this->goToHome();
 
-            }else{
+            } else {
                 $form->populate($formData);
             }
         }

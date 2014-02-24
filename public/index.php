@@ -26,6 +26,7 @@ function dd($text)
     echo '</pre>';
 }
 
+define('BASE_PATH', dirname(__FILE__));
 
 // Define path to application directory
 defined('APPLICATION_PATH')

@@ -83,7 +83,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             'user'     => $connectionSettings['conn']['user'],
             'password' => $connectionSettings['conn']['pass'],
             'dbname'   => $connectionSettings['conn']['dbname'],
-            'host'     => $connectionSettings['conn']['host']
+            'host'     => $connectionSettings['conn']['host'],
+            'driverOptions' => $connectionSettings['conn']['driver']
+
         );
         $entityManager = \Doctrine\ORM\EntityManager::create($conn, $config);
 

@@ -5,7 +5,7 @@
     <title>Test Task</title>
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/main.css?i={microtime(true)}">
+    <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/theme.css">
 
 

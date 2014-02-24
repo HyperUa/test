@@ -1,6 +1,6 @@
 <?php
 
-Class Task
+Class Task_Main
 {
 
     public static function getAuth()
@@ -12,6 +12,22 @@ Class Task
     public static function getBootstrap()
     {
         return Zend_Controller_Front::getInstance()->getParam('bootstrap');
+    }
+
+
+    public static function checkUrl($options = array()){
+
+        foreach($options as $key => $option){
+            $key = ucfirst($key);
+
+            if(method_exists(self::getRequest(), 'get'.$key.'Name')){
+                if(self::getRequest()->{'get'.$key.'Name'}() != $option){
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
 

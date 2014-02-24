@@ -5,6 +5,8 @@ class Form_AddBook extends Task_Form
     const ERR_EMPTY_TITLE = 'Введите название книги';
     const ERR_EMPTY_GENRE = 'Выберите как минимум 1 жанр';
     const ERR_EMPTY_AUTH  = 'Выберите как минимум 1 автора';
+    const ERR_EMPTY_FILE  = 'Выберите книгу';
+
 
     private function getGenres()
     {
@@ -58,7 +60,7 @@ class Form_AddBook extends Task_Form
 
             $this->addElement($inputAuthor);
         }
-d(APPLICATION_PATH);
+/*
         $file = new Zend_Form_Element_File('file');
         $file->setLabel('Добавить книгу')
             ->setDestination(BASE_PATH . '/data/uploads')
@@ -68,11 +70,12 @@ d(APPLICATION_PATH);
                     array(
                         'NotEmpty',
                         true,
-                        array('messages' => array(Zend_Validate_NotEmpty::IS_EMPTY => self::ERR_EMPTY_TITLE))
+                        array('messages' => array(Zend_Validate_NotEmpty::IS_EMPTY => self::ERR_EMPTY_FILE))
                     ),
                 )
-            );;
+            );
         $this->addElement($file);
+*/
 
         $this->addElement('submit', 'add', array(
             'label' => 'Добавить'
@@ -97,7 +100,7 @@ d(APPLICATION_PATH);
             }
 
             $authors = $this->getElement('authors');
-            $authVal = $genres->getValue();
+            $authVal = $authors->getValue();
 
             if (count($authVal) < 1) {
                 $authors->setErrors(array(self::ERR_EMPTY_AUTH));

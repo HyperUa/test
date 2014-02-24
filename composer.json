@@ -10,5 +10,10 @@
     "config": {
         "process-timeout": 600,
         "vendor-dir": "../vendor"
+    },
+
+    "suggest": {
+        "doctrine/orm": ">=2.1"
     }
+
 }

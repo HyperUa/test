@@ -6,7 +6,7 @@
     </div>
 
     <ul>
-        {foreach from = $books item=book}
+        {foreach from = $paginator item=book}
             <li class="task_list">
 
                 <div class="col-lg-6">
@@ -53,5 +53,7 @@
             </li>
         {/foreach}
     </ul>
+
+    {include file="pagination.tpl"}
 
 </div>
