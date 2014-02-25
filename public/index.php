@@ -12,7 +12,6 @@ header("Cache-Control: no-cache, must-revalidate");
 require_once(dirname(__FILE__) . '/../../vendor/autoload.php');
 
 
-
 function d($text)
 {
     dd($text);
@@ -26,6 +25,7 @@ function dd($text)
     echo '</pre>';
 }
 
+define('BASE_PATH', dirname(__FILE__));
 
 // Define path to application directory
 defined('APPLICATION_PATH')
