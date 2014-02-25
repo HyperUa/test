@@ -2,26 +2,20 @@
 
 Class Task_Main
 {
-
-    public static function getAuth()
-    {
-        return Zend_Auth::getInstance();
-    }
-
-
     public static function getBootstrap()
     {
         return Zend_Controller_Front::getInstance()->getParam('bootstrap');
     }
 
 
-    public static function checkUrl($options = array()){
+    public static function checkUrl($options = array())
+    {
 
-        foreach($options as $key => $option){
+        foreach ($options as $key => $option) {
             $key = ucfirst($key);
 
-            if(method_exists(self::getRequest(), 'get'.$key.'Name')){
-                if(self::getRequest()->{'get'.$key.'Name'}() != $option){
+            if (method_exists(self::getRequest(), 'get' . $key . 'Name')) {
+                if (self::getRequest()->{'get' . $key . 'Name'}() != $option) {
                     return false;
                 }
             }
@@ -37,12 +31,6 @@ Class Task_Main
     }
 
 
-    public static function getIdentity()
-    {
-        return self::getAuth()->hasIdentity() ? self::getAuth()->getIdentity() : false;
-    }
-
-
     public static function getRequest()
     {
         return Zend_Controller_Front::getInstance()->getRequest();
@@ -52,5 +40,27 @@ Class Task_Main
     public static function getResponse()
     {
         return Zend_Controller_Front::getInstance()->getResponse();
+    }
+
+
+    public static function getOption($option = null)
+    {
+        if ($option !== null) {
+            $options = explode('/', $option);
+
+            $result = self::getBootstrap()->getOption($options[0]);
+            unset($options[0]);
+
+            if(count($options) == 0){
+                return $result;
+            }
+
+            while (list ($key, $val) = each ($options) ){
+                if(!isset($result[$val])) return null;
+                $result = $result[$val];
+            }
+            return $result;
+        }
+        return self::getBootstrap()->getOptions();
     }
 }

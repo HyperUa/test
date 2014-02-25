@@ -12,7 +12,6 @@ header("Cache-Control: no-cache, must-revalidate");
 require_once(dirname(__FILE__) . '/../../vendor/autoload.php');
 
 
-
 function d($text)
 {
     dd($text);

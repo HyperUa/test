@@ -1,55 +1,62 @@
 <div class="col-lg-12">
-    <h1>Список книг</h1>
 
-    <div class="left">
-        <a href="{$this->url(['controller' => 'index', 'action' => 'add'])}">Добавить</a>
+    <div class="add_new">
+        <a href="{$this->url([], 'add')}">Добавить</a>
     </div>
+
+    <h1>Список книг</h1>
 
     <ul>
         {foreach from = $paginator item=book}
             <li class="task_list">
 
-                <div class="col-lg-6">
-                    <h4>{$book->getName()}</h4>
+                <h4>{$book->getName()}</h4>
 
-                    <h6>Жанры:</h6>
-                    <ul>
-                        {foreach from = $book->getGenre() item=ganre}
-                            <li>{$ganre->getGenre()}</li>
-                        {/foreach}
+                <ul class="books_list_data">
 
-                        {if $book->getGenre()->count() == 0}
-                            <li>Жанры не выбраны</li>
-                        {/if}
-                    </ul>
-                </div>
+                    <li class="books_list_genre">
+                        <h6>Жанры:</h6>
+                        <ul>
+                            {foreach from = $book->getGenre() item=ganre}
+                                <li>{$ganre->getGenre()}</li>
+                            {/foreach}
 
-                <div class="col-lg-6">
-                    <div class="task_list_options">
-                        <ul class="inline-list">
-                            <li>
-                                <a href="{$this->url(['controller' => 'index', 'action' => 'delete', 'id' => $book->getId()])}">Delete</a>
-                            </li>
-                            <li>
-                                <a href="{$this->url(['controller' => 'index', 'action' => 'edit', 'id' => $book->getId()])}">Edit</a>
-                            </li>
-                            <li>
-                                <a href="{$this->url(['controller' => 'index', 'action' => 'download', 'id' => $book->getId()])}">Download</a>
-                            </li>
+                            {if $book->getGenre()->count() == 0}
+                                <li>Жанры не выбраны</li>
+                            {/if}
                         </ul>
-                    </div>
+                    </li>
 
-                    <h6>Авторы:</h6>
-                    <ul>
-                        {foreach from = $book->getAuthor() item=author}
-                            <li>{$author->getName()}</li>
-                        {/foreach}
+                    <li class="books_list_authors">
+                        <h6>Авторы:</h6>
+                        <ul>
+                            {foreach from = $book->getAuthor() item=author}
+                                <li>{$author->getName()}</li>
+                            {/foreach}
 
-                        {if $book->getAuthor()->count() == 0}
-                            <li>Авторы не назначены</li>
-                        {/if}
-                    </ul>
-                </div>
+                            {if $book->getAuthor()->count() == 0}
+                                <li>Авторы не назначены</li>
+                            {/if}
+                        </ul>
+                    </li>
+
+                    <li class="books_list_options">
+                        <div class="task_list_options">
+                            <ul class="inline-list">
+                                <li>
+                                    <a href="{$this->url(['id' => $book->getId()], 'delete')}">Delete</a>
+                                </li>
+                                <li>
+                                    <a href="{$this->url(['id' => $book->getId()], 'edit')}">Edit</a>
+                                </li>
+                                <li>
+                                    <a href="{$this->url(['id' => $book->getId()], 'download')}">Download</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                </ul>
             </li>
         {/foreach}
     </ul>

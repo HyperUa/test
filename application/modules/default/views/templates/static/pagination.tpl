@@ -5,15 +5,15 @@
 
         {if (isset($paginator->getPages()->previous))}
             <li>
-                <a class="page-prev" href="{$this->url(['page' => $pages->previous])}">Previous</a>
+                <a class="page-prev" href="{$this->url(['page' => $pages->previous], 'home')}">Previous</a>
             </li>
         {/if}
 
-        {foreach from = $pages->pagesInRange item=page }
+        {foreach from = $pages->pagesInRange item=page}
 
             {if $page != $pages->current}
                 <li>
-                    <a class="page-item" href="{$this->url(['page' => $page])}">
+                    <a class="page-item" href="{$this->url(['page' => $page], 'home')}">
                         {$page}
                     </a>
                 </li>
@@ -29,7 +29,7 @@
 
         {if isset($pages->next)}
             <li>
-                <a class="page-next" href="{$this->url(['page' => $pages->next])}">Next</a>
+                <a class="page-next" href="{$this->url(['page' => $pages->next], 'home')}">Next</a>
             </li>
         {/if}
 

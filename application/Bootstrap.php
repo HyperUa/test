@@ -46,7 +46,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $connectionSettings = $this->getOption('doctrine');
 
-
         $classLoader = new \Doctrine\Common\ClassLoader(
             'Repository',
             APPLICATION_PATH
@@ -79,11 +78,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $config->setProxyNamespace('Proxies');
 
         $conn = array(
-            'driver'   => $connectionSettings['conn']['driv'],
-            'user'     => $connectionSettings['conn']['user'],
+            'driver' => $connectionSettings['conn']['driv'],
+            'user' => $connectionSettings['conn']['user'],
             'password' => $connectionSettings['conn']['pass'],
-            'dbname'   => $connectionSettings['conn']['dbname'],
-            'host'     => $connectionSettings['conn']['host'],
+            'dbname' => $connectionSettings['conn']['dbname'],
+            'host' => $connectionSettings['conn']['host'],
             'driverOptions' => $connectionSettings['conn']['driver']
 
         );
@@ -97,6 +96,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $entityManager;
     }
 
+    public function _initRequest()
+    {
+
+        $Request = new Zend_Controller_Request_Http;
+        $this->getResource('frontController')
+            ->getRouter()
+            ->addConfig(new Zend_Config_Ini(APPLICATION_PATH . "/configs/routes.ini"), "routes")
+            ->route($Request);
+
+        return $Request;
+    }
 
 }
 

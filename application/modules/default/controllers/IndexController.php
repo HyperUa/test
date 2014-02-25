@@ -3,7 +3,7 @@
 
 class IndexController extends Task_Controller_Action
 {
-    const COUNT_PER_PAGE = 2;
+    const COUNT_PER_PAGE = 3;
 
 
     public function preDispatch()
@@ -26,10 +26,10 @@ class IndexController extends Task_Controller_Action
 
     public function indexAction()
     {
+
         $page = $this->getRequest()->getParam('page', 1);
 
-
-        $dql = "SELECT b FROM Entities\\Books b";
+        $dql = 'SELECT b FROM Entities\Books b ORDER BY b.id DESC ';
 
         $query = $this->getEntityManager()->createQuery($dql);
         $d2Paginator = new Doctrine\ORM\Tools\Pagination\Paginator($query);
@@ -45,7 +45,6 @@ class IndexController extends Task_Controller_Action
             ->setCurrentPageNumber($page);
 
         $this->view->paginator = $zendPaginator;
-
     }
 
 
@@ -62,25 +61,39 @@ class IndexController extends Task_Controller_Action
 
     public function downloadAction()
     {
+        $fileName = $this->book->getPath();
+        $fileFullName = BASE_PATH . Task_Main::getOption('upload/path') . $this->book->getPath();
 
+        if(file_exists($fileFullName)){
+            header('Content-Type: text');
+            header('Content-Disposition: attachment; filename="' . $fileName . '"');
+            readfile($fileFullName);
+        }else{
+            $this->addFlashMessage('Книга не была найдена');
+            $this->goBack();
+        }
+
+        exit;
     }
 
     public function deleteAction()
     {
-
         Task_Service::getEntityManager()->remove($this->book);
         Task_Service::getEntityManager()->flush();
 
         $this->addFlashMessage('Книга удалена');
-        $this->goToHome();
+        $this->goBack();
+    }
+
+    public function optionsAction()
+    {
+
     }
 
 
     protected function _bookEdit($book, $type = 'new')
     {
-
-        $form = $this->_getAddForm();
-
+        $form = $this->_getAddForm($book, $type);
 
         if ($type == 'edit') {
             $form->populateEntity($book);
@@ -147,8 +160,19 @@ class IndexController extends Task_Controller_Action
                     }
                 }
 
-                if ($type == 'edit') {
+                if ($form->getElement('file')->getValue() != null) {
+                    $form->file->receive();
+                    //$originalFilename = pathinfo($form->file->getFileName());
+
+                    $book->setPath($form->getElement('file')->getValue());
+                }
+
+
+                if ($type == 'new') {
+                    $this->addFlashMessage('Книга была добавлена');
                     Task_Service::getEntityManager()->persist($book);
+                } else {
+                    $this->addFlashMessage('Книга была отредактирована');
                 }
                 Task_Service::getEntityManager()->flush();
 
@@ -163,10 +187,10 @@ class IndexController extends Task_Controller_Action
     }
 
 
-    protected function _getAddForm()
+    protected function _getAddForm(\Entities\Books $books, $type = 'new')
     {
-        require_once APPLICATION_PATH . '/forms/AddBook.php';
-        return new Form_AddBook();
+        require_once APPLICATION_PATH . '/forms/Book.php';
+        return new Form_Book(null, $books, $type);
     }
 
 
