@@ -1,8 +1,13 @@
 <?php
 
-Class Task_Form extends Zend_Form
-{
+namespace Task;
 
+use Zend_Form;
+use Zend_Registry;
+
+
+Class Form extends Zend_Form
+{
     public function populateEntity($entity)
     {
         return parent::populate($this->convertEntityToArray($entity));
@@ -11,7 +16,7 @@ Class Task_Form extends Zend_Form
     protected function convertEntityToArray($entity)
     {
         $data = array();
-        $metadata = Task_Service::getEntityManager()->getClassMetadata(get_class($entity));
+        $metadata = Zend_Registry::get('servicemanager')->raw('em')->getClassMetadata(get_class($entity));
 
         foreach ($metadata->fieldMappings as $field => $mapping)
         {
@@ -32,6 +37,4 @@ Class Task_Form extends Zend_Form
 
         return $data;
     }
-
-
 }

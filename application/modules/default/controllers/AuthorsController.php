@@ -14,7 +14,7 @@ class AuthorsController extends Task_Controller_Action
 
             if (!$author[0] instanceof \Entities\Authors) {
                 $this->addFlashMessage('Автор не был найден');
-                $this->goToHome();
+               // $this->goToHome();
             }
             $this->author = $author[0];
         }

@@ -1,4 +1,5 @@
- <?php
+<?php
+
 
 class Smarty_View extends Zend_View_Abstract
 {

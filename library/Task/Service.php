@@ -1,5 +1,5 @@
 <?php
-
+/*
 class Task_Service extends Task_Main
 {
     private static $_entityManager;
@@ -40,4 +40,4 @@ class Task_Service extends Task_Main
 
         return self::$_models[$model];
     }
-}
+}*/

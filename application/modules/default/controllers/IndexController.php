@@ -1,7 +1,9 @@
 <?php
 
+use Task\Controller\Action;
 
-class IndexController extends Task_Controller_Action
+
+class IndexController extends Action
 {
     const COUNT_PER_PAGE = 3;
 
@@ -10,34 +12,94 @@ class IndexController extends Task_Controller_Action
     {
         parent::preDispatch();
 
-        $this->id = $this->_request->get('id');
+        $this->id = $this->getRequest()->get('id');
 
         if ($this->id) {
-            $book = Task_Service::getRepository('books')->findById($this->id);
 
-            if (!$book[0] instanceof \Entities\Books) {
+           $book = Task_Service::getRepository('books')->findOneBy(array('id' => $this->id));
+
+            if (!$book instanceof \Entities\Books) {
                 $this->addFlashMessage('Книга не была найдена');
-                $this->goToHome();
+                //$this->goToHome();
             }
-            $this->book = $book[0];
+            $this->book = $book;
         }
     }
 
 
+
+
+
     public function indexAction()
     {
+        $pageSize = 2;
+        $currentPage = 1;
+
+        $dql = 'SELECT b FROM \Entities\Books b ORDER BY b.id DESC';
+        $query = $this->getEntityManager()
+            ->createQuery($dql);
+
+
+
+        $paginator  = new Task\Tools\Doctrine\Paginator($query);
+        $paginator->setItemCountPerPage(2)
+            ->setCurrentPageNumber(1);
+
+        $pager = $paginator->getIterator();
+
+
+
+        d($paginator->getMaxPage());
+
+
+
+
+
+
+        $totalItems = count($paginator);
+        d($totalItems);
+        $pagesCount = ceil($totalItems / $pageSize);
+
+// now get one page's items:
+        $paginator
+            ->getQuery()
+            ->setFirstResult($pageSize * ($currentPage-1)) // set the offset
+            ->setMaxResults($pageSize); // set the limit
+
+
+        foreach ($paginator as $pageItem) {
+            echo "<li>" . $pageItem->getName() . "</li>";
+        }
+
+d('dfg');
 
         $page = $this->getRequest()->getParam('page', 1);
 
-        $dql = 'SELECT b FROM Entities\Books b ORDER BY b.id DESC ';
-
-        $query = $this->getEntityManager()->createQuery($dql);
-        $d2Paginator = new Doctrine\ORM\Tools\Pagination\Paginator($query);
-
-        $d2PaginatorIter = $d2Paginator->getIterator();
+        $dql = 'SELECT SQL_CALC_FOUND_ROWS b FROM \Entities\Books b ORDER BY b.id DESC';
+        $query = $this->getEntityManager()
+            ->createQuery($dql)
+            ->setMaxResults(2);
 
 
-        $adapter = new \Zend_Paginator_Adapter_Iterator($d2PaginatorIter);
+
+
+        d($query->getResult());
+
+
+        $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($query, $fetchJoinCollection = true);
+
+        $paginatorIter = $paginator->getIterator();
+
+d(count($paginatorIter));
+
+
+        foreach($paginatorIter as $el){
+            echo $el->getHeadline() . "\n";
+        }
+
+d($paginatorIter);
+
+        $adapter = new \Zend_Paginator_Adapter_Iterator($paginatorIter);
 
         $zendPaginator = new \Zend_Paginator($adapter);
 
@@ -45,6 +107,7 @@ class IndexController extends Task_Controller_Action
             ->setCurrentPageNumber($page);
 
         $this->view->paginator = $zendPaginator;
+
     }
 
 
@@ -125,12 +188,14 @@ class IndexController extends Task_Controller_Action
                     }
                 }
 
-                //Write New Genres
-                foreach ($genres as $genre) {
-                    $genreObj = Task_Service::getRepository('genres')->findById($genre);
 
-                    if ($genreObj[0] instanceof \Entities\Genres) {
-                        $book->addGenre($genreObj[0]);
+                //Write New Genres
+                foreach ($genres as $genreId) {
+
+                    $genreObj = Task_Service::getRepository('genres')->findOneBy(array('id' => $genreId));
+
+                    if ($genreObj instanceof \Entities\Genres) {
+                        $book->addGenre($genreObj);
                     }
                 }
 
@@ -152,11 +217,11 @@ class IndexController extends Task_Controller_Action
                 }
 
                 //Write New Authors
-                foreach ($authors as $author) {
-                    $authObj = Task_Service::getRepository('authors')->findById($author);
+                foreach ($authors as $authorId) {
+                    $authObj = Task_Service::getRepository('authors')->findOneBy(array('id' => $authorId));
 
-                    if ($authObj[0] instanceof \Entities\Authors) {
-                        $book->addAuthor($authObj[0]);
+                    if ($authObj instanceof \Entities\Authors) {
+                        $book->addAuthor($authObj);
                     }
                 }
 

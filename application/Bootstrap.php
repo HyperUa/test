@@ -1,8 +1,15 @@
 <?php
 
+use Task\Service\Model;
+use Task\Service\Repository;
+use Task\Service\Entity;
+
+
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
+    protected $servicemanager;
+
 
     /**
      * Init Bootstrap
@@ -27,21 +34,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
 
 
-    /**
-     * Init Registry
-     * @return Zend_Registry
-     */
-    protected function _initRegistry()
-    {
-        $registry = Zend_Registry::getInstance();
-        return $registry;
-    }
-
-
-    /**
-     * Init Doctrine
-     * @return Doctrine_Manager
-     */
+/*
     public function _initDoctrine()
     {
         $connectionSettings = $this->getOption('doctrine');
@@ -88,14 +81,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
         $entityManager = \Doctrine\ORM\EntityManager::create($conn, $config);
 
-
-        $registry = Zend_Registry::getInstance();
-        $registry->entitymanager = $entityManager;
-
+        Zend_Registry::getInstance()->pimple['entitymanager'] = $entityManager;
 
         return $entityManager;
     }
-
+*/
     public function _initRequest()
     {
 
@@ -106,6 +96,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->route($Request);
 
         return $Request;
+    }
+
+    public function _initRegistry()
+    {
+        return Zend_Registry::getInstance();
+    }
+
+
+    public function _initServiceManager()
+    {
+        $this->bootstrap('registry');
+        require_once APPLICATION_PATH . '/configs/ServiceManagerInit.php';
+        $serviceManager = new ServiceManagerInit($this);
+
+        return $serviceManager;
     }
 
 }

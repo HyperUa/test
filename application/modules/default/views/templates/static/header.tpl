@@ -16,6 +16,10 @@
         <li {if Task_Main::checkUrl(['action' => 'options', 'controller' => 'index'])}class="active"{/if}>
             <a href="{$this->url([], 'options')}">Опции</a>
         </li>
+
+        <li {if Task_Main::checkUrl(['action' => 'login', 'controller' => 'auth'])}class="active"{/if}>
+            <a href="{$this->url([], 'login')}">Войти</a>
+        </li>
     </ul>
     <h3 class="text-muted">Тестовое задание</h3>
 </div>

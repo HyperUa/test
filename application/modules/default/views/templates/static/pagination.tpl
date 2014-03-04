@@ -1,11 +1,11 @@
-{assign var="pages" value=$paginator->getPages()}
+{assign var="pages" value = $paginator->getPages()}
 
 {if $pages->pageCount > 1}
     <ul id="paginator">
 
         {if (isset($paginator->getPages()->previous))}
             <li>
-                <a class="page-prev" href="{$this->url(['page' => $pages->previous], 'home')}">Previous</a>
+                <a class="page-prev" href="{$this->url(['page' => $pages->previous])}">Previous</a>
             </li>
         {/if}
 
@@ -29,7 +29,7 @@
 
         {if isset($pages->next)}
             <li>
-                <a class="page-next" href="{$this->url(['page' => $pages->next], 'home')}">Next</a>
+                <a class="page-next" href="{$this->url(['page' => $pages->next])}">Next</a>
             </li>
         {/if}
 

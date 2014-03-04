@@ -5,10 +5,14 @@
     <title>Test Task</title>
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/smoothness/jquery-ui-1.10.4.custom.min.css" >
     <link rel="stylesheet" href="/css/task-main.css">
 
 
-    {*<script crossorigin="anonymous" src="https://github.global.ssl.fastly.net/assets/frameworks-574a9489245858832a859b24d9512f49073e995a.js" type="text/javascript"></script>*}
+    <script src="/js/jquery-1.11-min.js"></script>
+    <script src="/js/jquery-ui-1.10.4.custom.min.js"></script>
+
+    <script src="/js/task.js"></script>
 <head>
 
 

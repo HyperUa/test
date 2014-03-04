@@ -1,25 +1,123 @@
 <?php
 
+namespace Task\Controller;
 
-class Task_Controller_Action extends Zend_Controller_Action{
+use Zend_Controller_Action as ZFAction;
 
 
+class Action extends ZFAction
+{
+
+    /**
+     * init Event
+     */
     public function init()
     {
-        /* Initialize action controller here */
-        $registry = Zend_Registry::getInstance();
-        $this->_em = $registry->entitymanager;
+       // $this->Auth = Zend_Auth::getInstance();
+    }
 
 
-        $this->Auth = Zend_Auth::getInstance();
+    /**
+     * postDispatch Event
+     */
+    public function postDispatch()
+    {
+        if ($this->_helper->FlashMessenger->hasMessages()) {
+            $this->view->flashMessenger = $this->_helper->FlashMessenger->getMessages();
+        }
+
+        $this->view->request = $this->getRequest();
+    }
+
+
+    /**
+     * @return \Pimple
+     */
+    public function getServiceManager()
+    {
+        return \Zend_Registry::get('servicemanager');
     }
 
     /**
-     * @return Doctrine\ORM\EntityManager
+     * @return \Doctrine\Orm\EntityManager
      */
-    public function getEntityManager(){
-        return $this->_em;
+    public  function getEntityManager()
+    {
+        return $this->getServiceManager()->offsetGet('em');
     }
+
+    /**
+     * @return \Task\Service\Model
+     */
+    public function getModel()
+    {
+        return $this->getServiceManager()->offsetGet('model');
+    }
+
+    /**
+     * @return \Task\Service\Repository
+     */
+    public function getRepository()
+    {
+        return $this->getServiceManager()->offsetGet('repository');
+    }
+
+    /**
+     * @param \Entity
+     * @return \Entity
+     */
+    public function getEntity(\Entity $entity)
+    {
+        $class = $this->getServiceManager()->raw('entity');
+        return $class::get($entity);
+    }
+
+    /**
+     * Redirect to home page
+     * @return void
+     */
+    protected function goToHome()
+    {
+        $this->_redirect('/');
+    }
+
+    /**
+     * Redirect to prev page
+     * @return void
+     */
+    protected function goBack()
+    {
+        $this->_redirect($this->getRequest()->getServer('HTTP_REFERER'));
+    }
+
+    /**
+     * Add Flash Message
+     * @param $message
+     */
+    protected function addFlashMessage($message)
+    {
+        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $flashMessenger->addMessage($message);
+    }
+
+    /**
+     * Check if coincidence url
+     * @param array $options
+     * @return bool
+     */
+    public function checkUrl($options = array())
+    {
+        //return Task_Main::checkUrl($options);
+    }
+
+    protected function gotoRoute($options = array(), $route)
+    {
+        if($this->_redirector == null){
+            $this->_redirector = $this->_helper->getHelper('Redirector');
+        }
+        return $this->_redirector->gotoRoute($options, $route);
+    }
+
 
 }
 
