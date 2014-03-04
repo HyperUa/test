@@ -14,7 +14,7 @@ class GenresController extends Task_Controller_Action
 
             if (!$genres[0] instanceof \Entities\Genres) {
                 $this->addFlashMessage('Жанр не был найден');
-                $this->goToHome();
+               // $this->goToHome();
             }
             $this->genre = $genres[0];
         }

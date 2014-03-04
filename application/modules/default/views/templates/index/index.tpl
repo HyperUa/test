@@ -1,7 +1,7 @@
 <div class="col-lg-12">
 
     <div class="add_new">
-        <a href="{$this->url([], 'add')}">Добавить</a>
+        <a href="{$this->url([], 'book_add')}">Добавить</a>
     </div>
 
     <h1>Список книг</h1>
@@ -44,13 +44,20 @@
                         <div class="task_list_options">
                             <ul class="inline-list">
                                 <li>
-                                    <a href="{$this->url(['id' => $book->getId()], 'delete')}">Delete</a>
+                                    <a href="{$this->url(['id' => $book->getId(), 'action' => 'delete'], 'book_opt')}">Delete</a>
+                                </li>
+
+                                <li class="ui-state-default ui-corner-all" title=".ui-icon-wrench">
+                                    <a title="Редактировать" href="{$this->url(['id' => $book->getId(), 'action' => 'edit'], 'book_opt')}">
+                                        <span class="ui-icon ui-icon-wrench"></span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{$this->url(['id' => $book->getId(), 'action' => 'edit'], 'book_opt')}">Edit</a>
                                 </li>
                                 <li>
-                                    <a href="{$this->url(['id' => $book->getId()], 'edit')}">Edit</a>
-                                </li>
-                                <li>
-                                    <a href="{$this->url(['id' => $book->getId()], 'download')}">Download</a>
+                                    <a href="{$this->url(['id' => $book->getId(), 'action' => 'download'], 'book_opt')}">Download</a>
                                 </li>
                             </ul>
                         </div>

@@ -4,9 +4,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', true);
 ini_set('html_errors', true);
 ini_set('error_reporting', E_ALL ^ E_NOTICE);
-header('Content-type: text/html; charset=utf-8');
-
-header("Cache-Control: no-cache, must-revalidate");
 
 
 require_once(dirname(__FILE__) . '/../../vendor/autoload.php');
@@ -42,7 +39,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 /** Zend_Application */
-require_once 'Zend/Application.php';
+//require_once 'Zend/Application.php';
 
 // Create application, bootstrap, and run
 $application = new Zend_Application(
