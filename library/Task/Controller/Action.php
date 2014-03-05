@@ -3,7 +3,7 @@
 namespace Task\Controller;
 
 use Zend_Controller_Action as ZFAction;
-
+use \Zend_Exception;
 
 class Action extends ZFAction
 {
@@ -30,6 +30,7 @@ class Action extends ZFAction
     }
 
 
+
     /**
      * @return \Pimple
      */
@@ -39,38 +40,36 @@ class Action extends ZFAction
     }
 
     /**
+     * @param $service
+     * @return mixed
+     * @throws \Zend_Exception
+     */
+    public function getService($service)
+    {
+        if (!$this->getServiceManager()->offsetExists($service)) {
+            throw new Zend_Exception("Сервис $service отсутствует");
+        }
+
+        return $this->getServiceManager()->offsetGet($service);
+    }
+
+
+    /**
      * @return \Doctrine\Orm\EntityManager
      */
-    public  function getEntityManager()
+    public function getEntityManager()
     {
-        return $this->getServiceManager()->offsetGet('em');
+        return $this->getService('em');
     }
 
-    /**
-     * @return \Task\Service\Model
-     */
-    public function getModel()
+
+    public function getRouter()
     {
-        return $this->getServiceManager()->offsetGet('model');
+        return $this->getFrontController()->getRouter();
     }
 
-    /**
-     * @return \Task\Service\Repository
-     */
-    public function getRepository()
-    {
-        return $this->getServiceManager()->offsetGet('repository');
-    }
 
-    /**
-     * @param \Entity
-     * @return \Entity
-     */
-    public function getEntity(\Entity $entity)
-    {
-        $class = $this->getServiceManager()->raw('entity');
-        return $class::get($entity);
-    }
+
 
     /**
      * Redirect to home page

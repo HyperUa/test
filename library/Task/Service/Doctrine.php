@@ -3,17 +3,16 @@ namespace Task\Service;
 
 Class Doctrine
 {
-    private static $container;
+    private $container;
 
     public function __construct(\Pimple $container)
     {
-        self::$container = $container;
+        $this->container = $container;
     }
 
-
-    public static function getEntityManager()
+    public function getEntityManager()
     {
-        $bootstrap = self::$container->offsetGet('bootstrap');
+        $bootstrap = $this->container->offsetGet('bootstrap');
         $connectionSettings = $bootstrap->getOption('doctrine');
 
         $classLoader = new \Doctrine\Common\ClassLoader(
@@ -23,6 +22,12 @@ Class Doctrine
         $classLoader->register();
         $classLoader = new \Doctrine\Common\ClassLoader(
             'Entities',
+            APPLICATION_PATH
+        );
+        $classLoader->register();
+
+        $classLoader = new \Doctrine\Common\ClassLoader(
+            'Models',
             APPLICATION_PATH
         );
         $classLoader->register();

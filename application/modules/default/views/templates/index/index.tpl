@@ -7,7 +7,7 @@
     <h1>Список книг</h1>
 
     <ul>
-        {foreach from = $paginator item=book}
+        {foreach from = $pagerfanta item=book}
             <li class="task_list">
 
                 <h4>{$book->getName()}</h4>
@@ -17,11 +17,11 @@
                     <li class="books_list_genre">
                         <h6>Жанры:</h6>
                         <ul>
-                            {foreach from = $book->getGenre() item=ganre}
+                            {foreach from = $book->getGenres() item=ganre}
                                 <li>{$ganre->getGenre()}</li>
                             {/foreach}
 
-                            {if $book->getGenre()->count() == 0}
+                            {if $book->getGenres()->count() == 0}
                                 <li>Жанры не выбраны</li>
                             {/if}
                         </ul>
@@ -30,11 +30,11 @@
                     <li class="books_list_authors">
                         <h6>Авторы:</h6>
                         <ul>
-                            {foreach from = $book->getAuthor() item=author}
+                            {foreach from = $book->getAuthors() item=author}
                                 <li>{$author->getName()}</li>
                             {/foreach}
 
-                            {if $book->getAuthor()->count() == 0}
+                            {if $book->getAuthors()->count() == 0}
                                 <li>Авторы не назначены</li>
                             {/if}
                         </ul>

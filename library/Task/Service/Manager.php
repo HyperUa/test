@@ -1,13 +1,13 @@
 <?php
 
+namespace Task\Service;
 
-class ServiceManagerInit
+use Pimple;
+use Zend_Controller_Front;
+use Task\Service\Doctrine;
+
+class Manager
 {
-
-    public function __construct()
-    {
-        $this->init();
-    }
 
     public function init()
     {
@@ -35,7 +35,7 @@ class ServiceManagerInit
 
         // Register Entity Manager
         $pimple['em'] = function ($c){
-            $doctrine = new Task\Service\Doctrine($c);
+            $doctrine = new Doctrine($c);
             return $doctrine->getEntityManager();
         };
 
@@ -65,4 +65,6 @@ class ServiceManagerInit
 
         Zend_Registry::set('servicemanager', $pimple);
     }
+
+
 }

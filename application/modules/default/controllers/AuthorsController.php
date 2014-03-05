@@ -84,7 +84,7 @@ class AuthorsController extends Task_Controller_Action
 
     protected function _getAuthorForm($type = 'new')
     {
-        require_once APPLICATION_PATH . '/forms/Author.php';
+        require_once APPLICATION_PATH . '/Forms/Author.php';
         return new Form_Author(null, $type);
     }
 

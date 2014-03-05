@@ -1,6 +1,18 @@
 <?php
 
-class Form_Book extends Task_Form
+namespace Forms;
+
+use Task\Form;
+use Zend_Form_Element_Text;
+use Zend_Form_Element_MultiCheckbox;
+use Zend_Form_Element_Multiselect;
+use Zend_Form_Element_File;
+use Zend_Validate_NotEmpty;
+use Zend_Validate_File_Extension;
+use Zend_Validate_File_FilesSize;
+
+
+class Book extends Form
 {
     const ERR_EMPTY_TITLE = 'Введите название книги';
     const ERR_EMPTY_GENRE = 'Выберите как минимум 1 жанр';
@@ -31,25 +43,25 @@ class Form_Book extends Task_Form
     {
         $this->book = $book;
         $this->type = $type;
+
         parent::__construct($options);
     }
 
-
     private function getGenres()
     {
-        return Task_Service::getRepository('genres')->findAll();
+        return $this->getEntityManager()->getRepository('\Entities\Genres')->findAll();
     }
 
     private function getAuthors()
     {
-        return Task_Service::getRepository('authors')->findAll();
+        return $this->getEntityManager()->getRepository('\Entities\Authors')->findAll();
     }
 
     public function init()
     {
         // метод пост
         $this->setMethod('post');
-
+        $upload_path = $this->getService('front_controller')->getParam('bootstrap')->getOption('upload_path');
 
         // Название
         $name = new Zend_Form_Element_Text('name');
@@ -100,7 +112,7 @@ class Form_Book extends Task_Form
                             array('messages' => array(Zend_Validate_NotEmpty::IS_EMPTY => self::ERR_EMPTY_AUTH))
                         ),
                     )
-                );;
+                );
 
             foreach ($authors as $author) {
                 $inputAuthor->addMultiOption($author->getId(), $author->getName());
@@ -110,7 +122,7 @@ class Form_Book extends Task_Form
         // Файл
         $file = new Zend_Form_Element_File('file');
         $file->setLabel('Выберите книгу')
-            ->setDestination(BASE_PATH . Task_Main::getOption('upload/path'))
+            ->setDestination(BASE_PATH . $upload_path)
             ->setRequired(false)
             ->setMaxFileSize(1310720)
             ->setValidators(
@@ -215,17 +227,16 @@ class Form_Book extends Task_Form
 
     public function populateEntity($entity)
     {
-
         $data = $this->convertEntityToArray($entity);
 
-        $genres = $entity->getGenre();
+        $genres = $entity->getGenres();
         if ($genres->count() > 0) {
             foreach ($genres as $genre) {
                 $data['genres'][] = $genre->getId();
             }
         }
 
-        $authors = $entity->getAuthor();
+        $authors = $entity->getAuthors();
         if ($authors->count() > 0) {
             foreach ($authors as $author) {
                 $data['authors'][] = $author->getId();

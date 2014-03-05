@@ -88,7 +88,7 @@ class AuthController extends Task_Controller_Action
 
     protected function _getLoginForm()
     {
-        require_once APPLICATION_PATH . '/forms/Auth/Login.php';
+        require_once APPLICATION_PATH . '/Forms/Auth/Login.php';
         return new Form_Login();
     }
 

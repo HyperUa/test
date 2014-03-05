@@ -4,7 +4,8 @@
         "zendframework/zendframework1": "~1.12",
         "smarty/smarty": "3.1.*",
         "doctrine/orm": "*",
-        "pimple/pimple" : "*"
+        "pimple/pimple" : "*",
+        "pagerfanta/pagerfanta" : "*"
     },
 
     "minimum-stability": "dev",
@@ -15,6 +16,15 @@
 
     "suggest": {
         "doctrine/orm": ">=2.1"
-    }
+    },
 
+
+    "autoload": {
+        "psr-0": {
+            "": ["application/"]
+        }
+
+
+
+    }
 }
