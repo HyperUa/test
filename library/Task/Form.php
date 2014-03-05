@@ -4,6 +4,7 @@ namespace Task;
 
 use Zend_Form;
 use Zend_Registry;
+use Zend_Exception;
 
 
 Class Form extends Zend_Form
@@ -13,10 +14,44 @@ Class Form extends Zend_Form
         return parent::populate($this->convertEntityToArray($entity));
     }
 
+
+    /**
+     * @return \Pimple
+     */
+    public function getServiceManager()
+    {
+        return \Zend_Registry::get('servicemanager');
+    }
+
+
+    /**
+     * @param $service
+     * @return mixed
+     * @throws \Zend_Exception
+     */
+    public function getService($service)
+    {
+        if (!$this->getServiceManager()->offsetExists($service)) {
+            throw new Zend_Exception("Сервис $service отсутствует");
+        }
+
+        return $this->getServiceManager()->offsetGet($service);
+    }
+
+
+    /**
+     * @return \Doctrine\Orm\EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->getService('em');
+    }
+
+
     protected function convertEntityToArray($entity)
     {
         $data = array();
-        $metadata = Zend_Registry::get('servicemanager')->raw('em')->getClassMetadata(get_class($entity));
+        $metadata = Zend_Registry::get('servicemanager')->offsetGet('em')->getClassMetadata(get_class($entity));
 
         foreach ($metadata->fieldMappings as $field => $mapping)
         {

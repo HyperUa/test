@@ -5,127 +5,94 @@ use Task\Controller\Action;
 
 class IndexController extends Action
 {
-    const COUNT_PER_PAGE = 3;
 
-
-    public function preDispatch()
-    {
-        parent::preDispatch();
-
-        $this->id = $this->getRequest()->get('id');
-
-        if ($this->id) {
-
-           $book = Task_Service::getRepository('books')->findOneBy(array('id' => $this->id));
-
-            if (!$book instanceof \Entities\Books) {
-                $this->addFlashMessage('Книга не была найдена');
-                //$this->goToHome();
-            }
-            $this->book = $book;
-        }
-    }
-
-
-
+    const COUNT_PER_PAGE = 2;
 
 
     public function indexAction()
     {
-        $pageSize = 2;
-        $currentPage = 1;
+        $page = $this->getParam('page', 1);
+        $paginator = $this->getService('pager');
 
         $dql = 'SELECT b FROM \Entities\Books b ORDER BY b.id DESC';
         $query = $this->getEntityManager()
             ->createQuery($dql);
 
+        // Create Paginator
+        $pagerfanta = $paginator
+            ->getORMpagerFanta($query, $page, self::COUNT_PER_PAGE);
 
-
-        $paginator  = new Task\Tools\Doctrine\Paginator($query);
-        $paginator->setItemCountPerPage(2)
-            ->setCurrentPageNumber(1);
-
-        $pager = $paginator->getIterator();
-
-
-
-        d($paginator->getMaxPage());
-
-
-
-
-
-
-        $totalItems = count($paginator);
-        d($totalItems);
-        $pagesCount = ceil($totalItems / $pageSize);
-
-// now get one page's items:
-        $paginator
-            ->getQuery()
-            ->setFirstResult($pageSize * ($currentPage-1)) // set the offset
-            ->setMaxResults($pageSize); // set the limit
-
-
-        foreach ($paginator as $pageItem) {
-            echo "<li>" . $pageItem->getName() . "</li>";
-        }
-
-d('dfg');
-
-        $page = $this->getRequest()->getParam('page', 1);
-
-        $dql = 'SELECT SQL_CALC_FOUND_ROWS b FROM \Entities\Books b ORDER BY b.id DESC';
-        $query = $this->getEntityManager()
-            ->createQuery($dql)
-            ->setMaxResults(2);
-
-
-
-
-        d($query->getResult());
-
-
-        $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($query, $fetchJoinCollection = true);
-
-        $paginatorIter = $paginator->getIterator();
-
-d(count($paginatorIter));
-
-
-        foreach($paginatorIter as $el){
-            echo $el->getHeadline() . "\n";
-        }
-
-d($paginatorIter);
-
-        $adapter = new \Zend_Paginator_Adapter_Iterator($paginatorIter);
-
-        $zendPaginator = new \Zend_Paginator($adapter);
-
-        $zendPaginator->setItemCountPerPage(self::COUNT_PER_PAGE)
-            ->setCurrentPageNumber($page);
-
-        $this->view->paginator = $zendPaginator;
-
+        $this->view->pagerfanta = $pagerfanta;
     }
 
 
     public function addAction()
     {
-        $this->_bookEdit(Task_Service::getModel('books'));
+        $service = $this->getService('book');
+        $book    = $service->createNewEntity();
+
+        // Get form with
+        $form = $service->getForm($book, $service::ADD);
+
+        // Check Valid
+        if ($this->getRequest()->isPost()) {
+
+            $formData = $this->getRequest()->getPost();
+
+            if ($form->isValid($formData)) {
+
+                // Set values
+                $service->editBook($book, $form, $service::ADD);
+
+                $this->addFlashMessage('Книга была добавлена');
+                $this->goToHome();
+
+            }
+        }
+
+        $this->view->form = $form;
     }
+
 
     public function editAction()
     {
-        $this->_bookEdit($this->book, 'edit');
+        $id = $this->getParam('id');
+        $service = $this->getService('book');
+        $book    = $service->getBookById($id);
+
+        // Get form with
+        $form = $service->getForm($book, $service::EDIT);
+
+        // Check Valid
+        if ($this->getRequest()->isPost()) {
+
+            $formData = $this->getRequest()->getPost();
+
+            if ($form->isValid($formData)) {
+
+                // Set values
+                $service->editBook($book, $form, $service::EDIT);
+
+                $this->addFlashMessage('Книга была отредактирована');
+                $this->goToHome();
+
+            }
+        }
+
+        $this->view->form = $form;
     }
 
-
+    // TODO: изменить директорию загружаемого файла
     public function downloadAction()
     {
-        $fileName = $this->book->getPath();
-        $fileFullName = BASE_PATH . Task_Main::getOption('upload/path') . $this->book->getPath();
+        $id = $this->getParam('id');
+        $service = $this->getService('book');
+        $book    = $service->getBookById($id);
+
+        $upload_path = $this->getService('front_controller')->getParam('bootstrap')->getOption('upload_path');
+
+        $fileName = $book->getPath();
+        $fileFullName = BASE_PATH . $upload_path . $book->getPath();
 
         if(file_exists($fileFullName)){
             header('Content-Type: text');
@@ -141,8 +108,11 @@ d($paginatorIter);
 
     public function deleteAction()
     {
-        Task_Service::getEntityManager()->remove($this->book);
-        Task_Service::getEntityManager()->flush();
+        $id = $this->getParam('id');
+        $service = $this->getService('book');
+        $book    = $service->getBookById($id);
+
+        $service->doRemove($book);
 
         $this->addFlashMessage('Книга удалена');
         $this->goBack();
@@ -152,112 +122,5 @@ d($paginatorIter);
     {
 
     }
-
-
-    protected function _bookEdit($book, $type = 'new')
-    {
-        $form = $this->_getAddForm($book, $type);
-
-        if ($type == 'edit') {
-            $form->populateEntity($book);
-        }
-
-        if ($this->_request->isPost()) {
-
-            $formData = $this->_request->getPost();
-
-            if ($form->isValid($formData)) {
-
-                $book->setName($form->getValue('name'));
-                $book->setUserId(1);
-
-
-                //Genres
-                $genres = $form->getValue('genres');
-
-                //Removing Old Genres
-                $currentGenres = $book->getGenre();
-
-                if ($currentGenres->count() > 0) {
-                    foreach ($currentGenres as $currentGenre) {
-                        if (in_array($currentGenre->getId(), $genres)) {
-                            unset($genres[array_search($currentGenre->getId(), $genres)]);
-                        } else {
-                            $book->removeGenre($currentGenre);
-                        }
-                    }
-                }
-
-
-                //Write New Genres
-                foreach ($genres as $genreId) {
-
-                    $genreObj = Task_Service::getRepository('genres')->findOneBy(array('id' => $genreId));
-
-                    if ($genreObj instanceof \Entities\Genres) {
-                        $book->addGenre($genreObj);
-                    }
-                }
-
-
-                //Authors
-                $authors = $form->getValue('authors');
-
-                //Removing Old Authors
-                $currentAuthors = $book->getAuthor();
-
-                if ($currentAuthors->count() > 0) {
-                    foreach ($currentAuthors as $currentAuthor) {
-                        if (in_array($currentAuthor->getId(), $genres)) {
-                            unset($authors[array_search($currentAuthor->getId(), $authors)]);
-                        } else {
-                            $book->removeAuthor($currentAuthor);
-                        }
-                    }
-                }
-
-                //Write New Authors
-                foreach ($authors as $authorId) {
-                    $authObj = Task_Service::getRepository('authors')->findOneBy(array('id' => $authorId));
-
-                    if ($authObj instanceof \Entities\Authors) {
-                        $book->addAuthor($authObj);
-                    }
-                }
-
-                if ($form->getElement('file')->getValue() != null) {
-                    $form->file->receive();
-                    //$originalFilename = pathinfo($form->file->getFileName());
-
-                    $book->setPath($form->getElement('file')->getValue());
-                }
-
-
-                if ($type == 'new') {
-                    $this->addFlashMessage('Книга была добавлена');
-                    Task_Service::getEntityManager()->persist($book);
-                } else {
-                    $this->addFlashMessage('Книга была отредактирована');
-                }
-                Task_Service::getEntityManager()->flush();
-
-                $this->goToHome();
-
-            } else {
-                $form->populate($formData);
-            }
-        }
-
-        $this->view->form = $form;
-    }
-
-
-    protected function _getAddForm(\Entities\Books $books, $type = 'new')
-    {
-        require_once APPLICATION_PATH . '/forms/Book.php';
-        return new Form_Book(null, $books, $type);
-    }
-
-
 }
 

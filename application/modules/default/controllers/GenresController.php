@@ -84,7 +84,7 @@ class GenresController extends Task_Controller_Action
 
     protected function _getGenreForm($type = 'new')
     {
-        require_once APPLICATION_PATH . '/forms/Genre.php';
+        require_once APPLICATION_PATH . '/Forms/Genre.php';
         return new Form_Genre(null, $type);
     }
 
