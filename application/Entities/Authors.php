@@ -43,11 +43,10 @@ class Authors
         $this->book = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -71,7 +70,7 @@ class Authors
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -81,11 +80,11 @@ class Authors
     /**
      * Add book
      *
-     * @param \Books $book
+     * @param \Entities\Books $book
      *
      * @return Authors
      */
-    public function addBook(\Books $book)
+    public function addBook(\Entities\Books $book)
     {
         $this->book[] = $book;
 
@@ -95,9 +94,9 @@ class Authors
     /**
      * Remove book
      *
-     * @param \Books $book
+     * @param \Entities\Books $book
      */
-    public function removeBook(\Books $book)
+    public function removeBook(\Entities\Books $book)
     {
         $this->book->removeElement($book);
     }
@@ -105,10 +104,11 @@ class Authors
     /**
      * Get book
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getBook()
     {
         return $this->book;
     }
 }
+

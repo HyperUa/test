@@ -59,7 +59,7 @@ class ServiceManagerInit
          * @param $c
          * @return \Task\Service\Paginator
          */
-        $pimple['pager'] = function ($c){
+        $pimple['paginator'] = function ($c){
             return new \Task\Service\Paginator($c);
         };
 

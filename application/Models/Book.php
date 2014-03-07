@@ -11,14 +11,9 @@ use Forms\Book as Book_Form;
  */
 class Book extends Processor
 {
-    const EDIT = 'Edit';
-    const ADD = 'Add';
+    const EDIT = 'Редактировать';
+    const ADD = 'Добавить';
 
-
-    public function __construct(\Pimple $container)
-    {
-        parent::__construct($container);
-    }
 
     /**
      * @return Entities\Books
@@ -40,7 +35,13 @@ class Book extends Processor
 
         if ($type == self::EDIT) {
             $form->populateEntity($book);
+
+            if ($book->getPath() != null) {
+                \Task\JsInit::getInstance()->addMethod('Task.Form.setFilePath', $book->getBaseName(), 'file');
+            }
         }
+        $form->getElement('submit')->setLabel($type);
+
 
         return $form;
     }
@@ -53,13 +54,12 @@ class Book extends Processor
      */
     public function editBook(Entities\Books $book, \Zend_Form $form, $type)
     {
+        $user = $this->getService('user')->getIdentityUser();
         $book->setName($form->getValue('name'));
-        $book->setUserId(1);
-
+        $book->setUser($user);
 
         //Genres
         $genres = $form->getValue('genres');
-
         //Removing Old Genres
         $currentGenres = $book->getGenres();
 
@@ -75,7 +75,7 @@ class Book extends Processor
 
         //Write New Genres
         foreach ($genres as $genreId) {
-            $genreObj = $this->getEntityManager()->getRepository('Entities\Genres')->findOneBy(array('id' => $genreId));
+            $genreObj = $this->getEntityManager()->getRepository('Entities\Genres')->find($genreId);
 
             if ($genreObj instanceof \Entities\Genres) {
                 $book->addGenre($genreObj);
@@ -101,7 +101,7 @@ class Book extends Processor
 
         //Write New Authors
         foreach ($authors as $authorId) {
-            $authObj = $this->getEntityManager()->getRepository('Entities\Authors')->findOneBy(array('id' => $authorId));
+            $authObj = $this->getEntityManager()->getRepository('Entities\Authors')->find($authorId);
 
             if ($authObj instanceof \Entities\Authors) {
                 $book->addAuthor($authObj);
@@ -111,28 +111,58 @@ class Book extends Processor
 
         // File
         if ($form->getElement('file')->getValue() != null) {
-            $form->file->receive();
-            //$originalFilename = pathinfo($form->file->getFileName());
 
-            $book->setPath($form->getElement('file')->getValue());
+            $fileInfo = $form->file->getFileInfo();
+            $ext = pathinfo($fileInfo['file']['name'], PATHINFO_EXTENSION);
+
+            $dir = $this->getBookPath($user);
+            if(!file_exists($dir)){
+                mkdir($dir);
+            }
+
+            $name = microtime(true).'.'.$ext;
+            rename($fileInfo['file']['tmp_name'], $dir.$name);
+
+            // Remove Old
+            if($book->getPath() != null){
+                unlink($dir .$book->getPath());
+            }
+
+            $book->setPath($name);
+            $book->setBaseName($form->getElement('file')->getValue());
         }
 
+        $em = $this->getEntityManager();
         if ($type == self::ADD) {
-            $this->getEntityManager()->persist($book);
+            $em->persist($book);
         }
-        $this->getEntityManager()->flush();
+        $em->flush();
 
         return true;
     }
 
     public function getBookById($id)
     {
-        $book = $this->getEntityManager()->getRepository('Entities\Books')->findOneBy(array('id' => $id));
+        $book = $this->getEntityManager()->getRepository('Entities\Books')->find($id);
 
         if(!$book instanceof Entities\Books){
             throw new \Zend_Controller_Exception('Книга не найдена', 404);
         }
 
         return $book;
+    }
+
+
+    public function doRemove(\Entities\Books $book)
+    {
+        $em = $this->getEntityManager();
+        $em->remove($book);
+        $em->flush();
+    }
+
+
+    public function getBookPath(\Entities\Users $user)
+    {
+        return BASE_PATH.'/data/uploads/User_'.$user->getId().'/' ;
     }
 }

@@ -1,80 +1,50 @@
 <?php
 
-class AuthorsController extends Task_Controller_Action
+use Task\Controller\Action;
+
+
+class AuthorsController extends Action
 {
-
-    public function preDispatch()
-    {
-        parent::preDispatch();
-
-        $this->id = $this->_request->get('id');
-
-        if ($this->id) {
-            $author = Task_Service::getRepository('authors')->findById($this->id);
-
-            if (!$author[0] instanceof \Entities\Authors) {
-                $this->addFlashMessage('Автор не был найден');
-               // $this->goToHome();
-            }
-            $this->author = $author[0];
-        }
-    }
+    const COUNT_PER_PAGE = 5;
 
 
     public function indexAction()
     {
-        $this->view->authors = Task_Service::getRepository('authors')->findAll();
+        $page = $this->getParam('page', 1);
+        $paginator = $this->getService('paginator');
+
+        $dql = 'SELECT a FROM \Entities\Authors a ORDER BY a.id DESC';
+        $query = $this->getEntityManager()
+            ->createQuery($dql);
+
+        // Create Paginator
+        $pagerfanta = $paginator
+            ->getORMpagerFanta($query, $page, self::COUNT_PER_PAGE);
+
+        $this->view->pagerfanta = $pagerfanta;
     }
+
 
     public function addAction()
     {
-        $this->_AuthorEdit(Task_Service::getModel('authors'));
-    }
+        $service = $this->getService('author');
+        $author  = $service->createNewEntity();
 
-    public function editAction()
-    {
-        $this->_AuthorEdit($this->author, 'edit');
-    }
+        // Get form with
+        $form = $service->getForm($author, $service::ADD);
 
-    public function deleteAction()
-    {
-        Task_Service::getEntityManager()->remove($this->author);
-        Task_Service::getEntityManager()->flush();
+        // Check Valid
+        if ($this->getRequest()->isPost()) {
 
-        $this->addFlashMessage('Автор удален');
-        $this->goBack();
-    }
-
-
-    protected function _AuthorEdit($author, $type = 'new')
-    {
-
-        $form = $this->_getAuthorForm($type);
-
-        if ($type == 'edit') {
-            $form->populateEntity($author);
-        }
-
-        if ($this->_request->isPost()) {
-
-            $formData = $this->_request->getPost();
+            $formData = $this->getRequest()->getPost();
 
             if ($form->isValid($formData)) {
 
-                $author->setName($form->getValue('name'));
+                // Set values
+                $service->editAuthor($author, $form, $service::ADD);
 
-                if ($type == 'new') {
-                    $this->addFlashMessage('Автор был добавлен');
-                    Task_Service::getEntityManager()->persist($author);
-                } else {
-                    $this->addFlashMessage('Автор был отредактирован');
-                }
-                Task_Service::getEntityManager()->flush();
-
-                $this->redirect($this->gotoRoute(array(), 'authors'));
-
-            } else {
-                $form->populate($formData);
+                $this->addFlashMessage('Автор был добавлен');
+                $this->gotoRoute(array(), 'authors');
             }
         }
 
@@ -82,11 +52,43 @@ class AuthorsController extends Task_Controller_Action
     }
 
 
-    protected function _getAuthorForm($type = 'new')
+    public function editAction()
     {
-        require_once APPLICATION_PATH . '/Forms/Author.php';
-        return new Form_Author(null, $type);
+        $id = $this->getParam('id');
+        $service = $this->getService('author');
+        $author  = $service->getAuthorById($id);
+
+        // Get form with
+        $form = $service->getForm($author, $service::EDIT);
+
+        // Check Valid
+        if ($this->getRequest()->isPost()) {
+
+            $formData = $this->getRequest()->getPost();
+
+            if ($form->isValid($formData)) {
+
+                // Set values
+                $service->editAuthor($author, $form, $service::EDIT);
+
+                $this->addFlashMessage('Автор был отредактирован');
+                $this->gotoRoute(array(), 'authors');
+            }
+        }
+
+        $this->view->form = $form;
     }
 
 
+    public function deleteAction()
+    {
+        $id = $this->getParam('id');
+        $service = $this->getService('author');
+        $author  = $service->getAuthorById($id);
+
+        $service->doRemove($author);
+
+        $this->addFlashMessage('Автор удален');
+        $this->goBack();
+    }
 }

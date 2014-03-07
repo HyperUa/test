@@ -3,20 +3,12 @@
 namespace Task\Controller;
 
 use Zend_Controller_Action as ZFAction;
-use \Zend_Exception;
+use Zend_Exception;
+use Task\Manager;
+
 
 class Action extends ZFAction
 {
-
-    /**
-     * init Event
-     */
-    public function init()
-    {
-       // $this->Auth = Zend_Auth::getInstance();
-    }
-
-
     /**
      * postDispatch Event
      */
@@ -25,18 +17,22 @@ class Action extends ZFAction
         if ($this->_helper->FlashMessenger->hasMessages()) {
             $this->view->flashMessenger = $this->_helper->FlashMessenger->getMessages();
         }
-
-        $this->view->request = $this->getRequest();
     }
 
-
+    public function checkUserAccess($id)
+    {
+        if(!$this->getService('user')->checkUserAccess($id)){
+            $this->addFlashMessage('У вас нет прав для просмотра данной страницы');
+            $this->goToHome();
+        }
+    }
 
     /**
      * @return \Pimple
      */
     public function getServiceManager()
     {
-        return \Zend_Registry::get('servicemanager');
+        return $this->getManager()->getServiceManager();
     }
 
     /**
@@ -46,13 +42,8 @@ class Action extends ZFAction
      */
     public function getService($service)
     {
-        if (!$this->getServiceManager()->offsetExists($service)) {
-            throw new Zend_Exception("Сервис $service отсутствует");
-        }
-
-        return $this->getServiceManager()->offsetGet($service);
+        return $this->getManager()->getService($service);
     }
-
 
     /**
      * @return \Doctrine\Orm\EntityManager
@@ -62,14 +53,21 @@ class Action extends ZFAction
         return $this->getService('em');
     }
 
+    /**
+     * @return Manager
+     */
+    private function getManager()
+    {
+        return Manager::getInstance();
+    }
 
+    /**
+     * @return \Zend_Controller_Router_Interface
+     */
     public function getRouter()
     {
         return $this->getFrontController()->getRouter();
     }
-
-
-
 
     /**
      * Redirect to home page
@@ -77,7 +75,7 @@ class Action extends ZFAction
      */
     protected function goToHome()
     {
-        $this->_redirect('/');
+        $this->gotoRoute(array(), 'home');
     }
 
     /**
@@ -100,23 +98,14 @@ class Action extends ZFAction
     }
 
     /**
-     * Check if coincidence url
      * @param array $options
-     * @return bool
+     * @param $route
+     * @return mixed
      */
-    public function checkUrl($options = array())
+    public function gotoRoute($options = array(), $route)
     {
-        //return Task_Main::checkUrl($options);
+        $redirector =  $this->_helper->getHelper('Redirector');
+        return $redirector->gotoRoute($options, $route);
     }
-
-    protected function gotoRoute($options = array(), $route)
-    {
-        if($this->_redirector == null){
-            $this->_redirector = $this->_helper->getHelper('Redirector');
-        }
-        return $this->_redirector->gotoRoute($options, $route);
-    }
-
-
 }
 

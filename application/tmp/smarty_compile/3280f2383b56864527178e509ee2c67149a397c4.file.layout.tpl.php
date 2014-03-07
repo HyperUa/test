@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-02-28 16:42:29
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-07 12:47:22
          compiled from "/home/myproj/webapp/application/modules/default/views/scripts/layout.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1193071469530764b91fe7d0-03699331%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '3280f2383b56864527178e509ee2c67149a397c4' => 
     array (
       0 => '/home/myproj/webapp/application/modules/default/views/scripts/layout.tpl',
-      1 => 1393605222,
+      1 => 1394196412,
       2 => 'file',
     ),
   ),
@@ -34,10 +34,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     <link rel="stylesheet" href="/css/task-main.css">
 
 
-    <script src="/js/jquery-1.11-min.js"></script>
-    <script src="/js/jquery-ui-1.10.4.custom.min.js"></script>
 
+
+    <script src="/js/jquery-1.11-min.js"></script>
     <script src="/js/task.js"></script>
+
+    
+    <link rel="stylesheet" href="/css/jquery.formstyler.css">
+    <script src="/js/jquery.formstyler.min.js"></script>
 <head>
 
 
@@ -57,6 +61,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         <?php echo $_smarty_tpl->getSubTemplate ("footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
 
     </div>
+
+    <?php echo $_smarty_tpl->getSubTemplate ("script.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
 
 </body>
 </html>

@@ -42,11 +42,15 @@ set_include_path(implode(PATH_SEPARATOR, array(
 
 /** Zend_Application */
 //require_once 'Zend/Application.php';
+$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV, true);
+$config->merge(new Zend_Config_Ini(APPLICATION_PATH . '/configs/routes.ini', null, array()));
+$config->merge(new Zend_Config_Ini(APPLICATION_PATH . '/configs/allowedurl.ini'));
+
 
 // Create application, bootstrap, and run
 $application = new Zend_Application(
     APPLICATION_ENV,
-    APPLICATION_PATH . '/configs/application.ini'
+    $config
 );
 
 $application->bootstrap()

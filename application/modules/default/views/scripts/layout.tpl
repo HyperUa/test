@@ -9,10 +9,14 @@
     <link rel="stylesheet" href="/css/task-main.css">
 
 
-    <script src="/js/jquery-1.11-min.js"></script>
-    <script src="/js/jquery-ui-1.10.4.custom.min.js"></script>
 
+
+    <script src="/js/jquery-1.11-min.js"></script>
     <script src="/js/task.js"></script>
+
+    {*Form Styler*}
+    <link rel="stylesheet" href="/css/jquery.formstyler.css">
+    <script src="/js/jquery.formstyler.min.js"></script>
 <head>
 
 
@@ -29,5 +33,6 @@
         {include file="footer.tpl"}
     </div>
 
+    {include file="script.tpl"}
 </body>
 </html>

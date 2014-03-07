@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Books
  *
- * @ORM\Table(name="books")
+ * @ORM\Table(name="books", indexes={@ORM\Index(name="books_ibfk_1", columns={"user_id"})})
  * @ORM\Entity
  */
 class Books
@@ -29,11 +29,28 @@ class Books
     private $name;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="user_id", type="bigint", nullable=false)
+     * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    private $userId;
+    private $path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="base_path", type="string", length=255, nullable=false)
+     */
+    private $baseName;
+
+    /**
+     * @var \Users
+     *
+     * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * })
+     */
+    private $user;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -48,7 +65,7 @@ class Books
      *   }
      * )
      */
-    private $authors;
+    private $author;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -63,14 +80,7 @@ class Books
      *   }
      * )
      */
-    private $genres;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
-    private $path;
+    private $genre;
 
     /**
      * Constructor
@@ -80,12 +90,10 @@ class Books
         $this->author = new \Doctrine\Common\Collections\ArrayCollection();
         $this->genre = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -109,7 +117,7 @@ class Books
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -117,100 +125,7 @@ class Books
     }
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return Books
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Add author
-     *
-     * @param Authors $author
-     *
-     * @return Books
-     */
-    public function addAuthor(Authors $author)
-    {
-        $this->authors[] = $author;
-
-        return $this;
-    }
-
-    /**
-     * Remove author
-     *
-     * @param Authors $author
-     */
-    public function removeAuthor(Authors $author)
-    {
-        $this->authors->removeElement($author);
-    }
-
-    /**
-     * Get authors
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getAuthors()
-    {
-        return $this->authors;
-    }
-
-    /**
-     * Add genre
-     *
-     * @param Genres $genre
-     *
-     * @return Books
-     */
-    public function addGenre(Genres $genre)
-    {
-        $this->genres[$genre->getId()] = $genre;
-
-        return $this;
-    }
-
-    /**
-     * Remove genre
-     *
-     * @param Genres $genre
-     */
-    public function removeGenre(Genres $genre)
-    {
-        $this->genres->removeElement($genre);
-    }
-
-
-    /**
-     * Get genres
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGenres()
-    {
-        return $this->genres;
-    }
-
-    /**
-     * Set name
+     * Set path
      *
      * @param string $path
      *
@@ -232,4 +147,122 @@ class Books
     {
         return $this->path;
     }
+
+    /**
+     * Set baseName
+     *
+     * @param string $baseName
+     *
+     * @return Books
+     */
+    public function setBaseName($baseName)
+    {
+        $this->baseName = $baseName;
+
+        return $this;
+    }
+
+    /**
+     * Get basePath
+     *
+     * @return string
+     */
+    public function getBaseName()
+    {
+        return $this->baseName;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Entities\Users $user
+     *
+     * @return Books
+     */
+    public function setUser(\Entities\Users $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Entities\Users
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Add author
+     *
+     * @param \Entities\Authors $author
+     *
+     * @return Books
+     */
+    public function addAuthor(\Entities\Authors $author)
+    {
+        $this->author[] = $author;
+
+        return $this;
+    }
+
+    /**
+     * Remove author
+     *
+     * @param \Entities\Authors $author
+     */
+    public function removeAuthor(\Entities\Authors $author)
+    {
+        $this->author->removeElement($author);
+    }
+
+    /**
+     * Get author
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAuthors()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Add genre
+     *
+     * @param \Entities\Genres $genre
+     *
+     * @return Books
+     */
+    public function addGenre(\Entities\Genres $genre)
+    {
+        $this->genre[] = $genre;
+
+        return $this;
+    }
+
+    /**
+     * Remove genre
+     *
+     * @param \Entities\Genres $genre
+     */
+    public function removeGenre(\Entities\Genres $genre)
+    {
+        $this->genre->removeElement($genre);
+    }
+
+    /**
+     * Get genre
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGenres()
+    {
+        return $this->genre;
+    }
+
 }
+
