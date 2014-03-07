@@ -1,80 +1,50 @@
 <?php
 
-class GenresController extends Task_Controller_Action
+use Task\Controller\Action;
+
+
+class GenresController extends Action
 {
-
-    public function preDispatch()
-    {
-        parent::preDispatch();
-
-        $this->id = $this->_request->get('id');
-
-        if ($this->id) {
-            $genres = Task_Service::getRepository('genres')->findById($this->id);
-
-            if (!$genres[0] instanceof \Entities\Genres) {
-                $this->addFlashMessage('Жанр не был найден');
-               // $this->goToHome();
-            }
-            $this->genre = $genres[0];
-        }
-    }
+    const COUNT_PER_PAGE = 5;
 
 
     public function indexAction()
     {
-        $this->view->genres = Task_Service::getRepository('genres')->findAll();
+        $page = $this->getParam('page', 1);
+        $paginator = $this->getService('paginator');
+
+        $dql = 'SELECT g FROM \Entities\Genres g ORDER BY g.id DESC';
+        $query = $this->getEntityManager()
+            ->createQuery($dql);
+
+        // Create Paginator
+        $pagerfanta = $paginator
+            ->getORMpagerFanta($query, $page, self::COUNT_PER_PAGE);
+
+        $this->view->pagerfanta = $pagerfanta;
     }
+
 
     public function addAction()
     {
-        $this->_GenreEdit(Task_Service::getModel('genres'));
-    }
+        $service = $this->getService('genre');
+        $genre    = $service->createNewEntity();
 
-    public function editAction()
-    {
-        $this->_GenreEdit($this->genre, 'edit');
-    }
+        // Get form with
+        $form = $service->getForm($genre, $service::ADD);
 
-    public function deleteAction()
-    {
-        Task_Service::getEntityManager()->remove($this->genre);
-        Task_Service::getEntityManager()->flush();
+        // Check Valid
+        if ($this->getRequest()->isPost()) {
 
-        $this->addFlashMessage('Жанр удален');
-        $this->goBack();
-    }
-
-
-    protected function _GenreEdit($genre, $type = 'new')
-    {
-
-        $form = $this->_getGenreForm($type);
-
-        if ($type == 'edit') {
-            $form->populateEntity($genre);
-        }
-
-        if ($this->_request->isPost()) {
-
-            $formData = $this->_request->getPost();
+            $formData = $this->getRequest()->getPost();
 
             if ($form->isValid($formData)) {
 
-                $genre->setGenre($form->getValue('genre'));
+                // Set values
+                $service->editGenre($genre, $form, $service::ADD);
 
-                if ($type == 'new') {
-                    $this->addFlashMessage('Жанр был добавлен');
-                    Task_Service::getEntityManager()->persist($genre);
-                } else {
-                    $this->addFlashMessage('Жанр был изменен');
-                }
-                Task_Service::getEntityManager()->flush();
-
-                $this->redirect($this->gotoRoute(array(), 'genres'));
-
-            } else {
-                $form->populate($formData);
+                $this->addFlashMessage('Жанр был добавлен');
+                $this->gotoRoute(array(), 'genres');
             }
         }
 
@@ -82,11 +52,43 @@ class GenresController extends Task_Controller_Action
     }
 
 
-    protected function _getGenreForm($type = 'new')
+    public function editAction()
     {
-        require_once APPLICATION_PATH . '/Forms/Genre.php';
-        return new Form_Genre(null, $type);
+        $id = $this->getParam('id');
+        $service = $this->getService('genre');
+        $genre    = $service->getGenreById($id);
+
+        // Get form with
+        $form = $service->getForm($genre, $service::EDIT);
+
+        // Check Valid
+        if ($this->getRequest()->isPost()) {
+
+            $formData = $this->getRequest()->getPost();
+
+            if ($form->isValid($formData)) {
+
+                // Set values
+                $service->editGenre($genre, $form, $service::EDIT);
+
+                $this->addFlashMessage('Жанр был отредактирован');
+                $this->gotoRoute(array(), 'genres');
+            }
+        }
+
+        $this->view->form = $form;
     }
 
 
+    public function deleteAction()
+    {
+        $id = $this->getParam('id');
+        $service = $this->getService('genre');
+        $genre    = $service->getGenreById($id);
+
+        $service->doRemove($genre);
+
+        $this->addFlashMessage('Жанр удален');
+        $this->goBack();
+    }
 }

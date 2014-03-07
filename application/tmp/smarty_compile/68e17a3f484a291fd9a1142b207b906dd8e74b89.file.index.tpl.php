@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-05 16:51:36
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-07 16:48:03
          compiled from "/home/myproj/webapp/application/modules/default/views/templates/index/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1405752683530764b9049bf5-33655909%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '68e17a3f484a291fd9a1142b207b906dd8e74b89' => 
     array (
       0 => '/home/myproj/webapp/application/modules/default/views/templates/index/index.tpl',
-      1 => 1394038298,
+      1 => 1394210881,
       2 => 'file',
     ),
   ),
@@ -20,18 +20,25 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'variables' => 
   array (
     'this' => 0,
+    'hasAuth' => 0,
     'pagerfanta' => 0,
     'book' => 0,
     'ganre' => 0,
     'author' => 0,
+    'id' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_530764b91327e8_12246374')) {function content_530764b91327e8_12246374($_smarty_tpl) {?><div class="col-lg-12">
+<?php if ($_valid && !is_callable('content_530764b91327e8_12246374')) {function content_530764b91327e8_12246374($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['hasAuth'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->auth()->hasIdentity(), null, 0);?>
+<?php $_smarty_tpl->tpl_vars['id'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->auth()->getIdentity(), null, 0);?>
+
+<div class="col-lg-12">
 
     <div class="add_new">
-        <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array(),'book_add');?>
+        <?php if ($_smarty_tpl->tpl_vars['hasAuth']->value) {?>
+            <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array(),'book_add');?>
 ">Добавить</a>
+        <?php }?>
     </div>
 
     <h1>Список книг</h1>
@@ -85,25 +92,28 @@ $_smarty_tpl->tpl_vars['author']->_loop = true;
                         </ul>
                     </li>
 
+                    <?php if ($_smarty_tpl->tpl_vars['hasAuth']->value) {?>
                     <li class="books_list_options">
                         <div class="task_list_options">
                             <ul class="inline-list">
-                                <li>
-                                    <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'delete'),'book_opt');?>
+                                <?php if ($_smarty_tpl->tpl_vars['id']->value==$_smarty_tpl->tpl_vars['book']->value->getUser()->getId()) {?>
+                                    <li>
+                                        <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'delete'),'book_opt');?>
 ">Delete</a>
-                                </li>
+                                    </li>
 
-                                <li class="ui-state-default ui-corner-all" title=".ui-icon-wrench">
-                                    <a title="Редактировать" href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
+                                    <li class="ui-state-default ui-corner-all" title=".ui-icon-wrench">
+                                        <a title="Редактировать" href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
 ">
-                                        <span class="ui-icon ui-icon-wrench"></span>
-                                    </a>
-                                </li>
+                                            <span class="ui-icon ui-icon-wrench"></span>
+                                        </a>
+                                    </li>
 
-                                <li>
-                                    <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
+                                    <li>
+                                        <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
 ">Edit</a>
-                                </li>
+                                    </li>
+                                <?php }?>
                                 <li>
                                     <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'download'),'book_opt');?>
 ">Download</a>
@@ -111,7 +121,7 @@ $_smarty_tpl->tpl_vars['author']->_loop = true;
                             </ul>
                         </div>
                     </li>
-
+                    <?php }?>
                 </ul>
             </li>
         <?php } ?>

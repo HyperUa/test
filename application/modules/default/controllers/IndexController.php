@@ -5,14 +5,13 @@ use Task\Controller\Action;
 
 class IndexController extends Action
 {
-
-    const COUNT_PER_PAGE = 2;
+    const COUNT_PER_PAGE = 5;
 
 
     public function indexAction()
     {
         $page = $this->getParam('page', 1);
-        $paginator = $this->getService('pager');
+        $paginator = $this->getService('paginator');
 
         $dql = 'SELECT b FROM \Entities\Books b ORDER BY b.id DESC';
         $query = $this->getEntityManager()
@@ -60,6 +59,8 @@ class IndexController extends Action
         $service = $this->getService('book');
         $book    = $service->getBookById($id);
 
+        $this->checkUserAccess($book->getUser()->getId());
+
         // Get form with
         $form = $service->getForm($book, $service::EDIT);
 
@@ -75,28 +76,25 @@ class IndexController extends Action
 
                 $this->addFlashMessage('Книга была отредактирована');
                 $this->goToHome();
-
             }
         }
 
         $this->view->form = $form;
     }
 
-    // TODO: изменить директорию загружаемого файла
+
     public function downloadAction()
     {
         $id = $this->getParam('id');
         $service = $this->getService('book');
         $book    = $service->getBookById($id);
 
-        $upload_path = $this->getService('front_controller')->getParam('bootstrap')->getOption('upload_path');
-
-        $fileName = $book->getPath();
-        $fileFullName = BASE_PATH . $upload_path . $book->getPath();
+        $path = $service->getBookPath($book->getUser());
+        $fileFullName = $path . $book->getPath();
 
         if(file_exists($fileFullName)){
             header('Content-Type: text');
-            header('Content-Disposition: attachment; filename="' . $fileName . '"');
+            header('Content-Disposition: attachment; filename="' . $book->getBaseName() . '"');
             readfile($fileFullName);
         }else{
             $this->addFlashMessage('Книга не была найдена');
@@ -112,6 +110,7 @@ class IndexController extends Action
         $service = $this->getService('book');
         $book    = $service->getBookById($id);
 
+        $this->checkUserAccess($book->getUser()->getId());
         $service->doRemove($book);
 
         $this->addFlashMessage('Книга удалена');

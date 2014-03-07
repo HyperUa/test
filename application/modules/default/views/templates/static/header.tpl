@@ -17,9 +17,16 @@
             <a href="{$this->url([], 'options')}">Опции</a>
         </li>
 
-        <li {if $this->checkUrl(['action' => 'login', 'controller' => 'auth'])}class="active"{/if}>
-            <a href="{$this->url([], 'login')}">Войти</a>
-        </li>
+
+        {if $this->auth()->hasIdentity()}
+            <li {if $this->checkUrl(['action' => 'logout', 'controller' => 'auth'])}class="active"{/if}>
+                <a href="{$this->url([], 'logout')}">Выйти</a>
+            </li>
+        {else}
+            <li {if $this->checkUrl(['action' => 'login', 'controller' => 'auth'])}class="active"{/if}>
+                <a href="{$this->url([], 'login')}">Войти</a>
+            </li>
+        {/if}
     </ul>
     <h3 class="text-muted">Тестовое задание</h3>
 </div>

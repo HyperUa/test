@@ -64,10 +64,10 @@ class Users extends \Entities\Users implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'id', 'login', 'password', 'hash', 'isAdmin');
+            return array('__isInitialized__', 'id', 'login', 'password');
         }
 
-        return array('__isInitialized__', 'id', 'login', 'password', 'hash', 'isAdmin');
+        return array('__isInitialized__', 'id', 'login', 'password');
     }
 
     /**
@@ -235,45 +235,34 @@ class Users extends \Entities\Users implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setHash($hash)
+    public function addBook(\Entities\Books $books)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHash', array($hash));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addBook', array($books));
 
-        return parent::setHash($hash);
+        return parent::addBook($books);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getHash()
+    public function removeBook(\Entities\Books $books)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHash', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeBook', array($books));
 
-        return parent::getHash();
+        return parent::removeBook($books);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setIsAdmin($isAdmin)
+    public function getBooks()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsAdmin', array($isAdmin));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBooks', array());
 
-        return parent::setIsAdmin($isAdmin);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getIsAdmin()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsAdmin', array());
-
-        return parent::getIsAdmin();
+        return parent::getBooks();
     }
 
 }

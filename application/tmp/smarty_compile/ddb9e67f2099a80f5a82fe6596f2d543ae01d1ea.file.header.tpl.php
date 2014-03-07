@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-05 15:00:23
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-06 15:51:22
          compiled from "/home/myproj/webapp/application/modules/default/views/templates/static/header.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1012306393530764b9247882-91832858%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'ddb9e67f2099a80f5a82fe6596f2d543ae01d1ea' => 
     array (
       0 => '/home/myproj/webapp/application/modules/default/views/templates/static/header.tpl',
-      1 => 1394031154,
+      1 => 1394120960,
       2 => 'file',
     ),
   ),
@@ -36,10 +36,18 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 ">Опции</a>
         </li>
 
-        <li <?php if ($_smarty_tpl->tpl_vars['this']->value->checkUrl(array('action'=>'login','controller'=>'auth'))) {?>class="active"<?php }?>>
-            <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array(),'login');?>
+
+        <?php if ($_smarty_tpl->tpl_vars['this']->value->auth()->hasIdentity()) {?>
+            <li <?php if ($_smarty_tpl->tpl_vars['this']->value->checkUrl(array('action'=>'logout','controller'=>'auth'))) {?>class="active"<?php }?>>
+                <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array(),'logout');?>
+">Выйти</a>
+            </li>
+        <?php } else { ?>
+            <li <?php if ($_smarty_tpl->tpl_vars['this']->value->checkUrl(array('action'=>'login','controller'=>'auth'))) {?>class="active"<?php }?>>
+                <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array(),'login');?>
 ">Войти</a>
-        </li>
+            </li>
+        <?php }?>
     </ul>
     <h3 class="text-muted">Тестовое задание</h3>
 </div>

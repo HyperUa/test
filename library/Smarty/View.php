@@ -21,6 +21,7 @@ class Smarty_View extends Zend_View_Abstract
      */
     private $_config = null;
 
+
     /**
      * Class definition and constructor
      *
@@ -337,6 +338,7 @@ class Smarty_View extends Zend_View_Abstract
         $this->_smarty->cache_dir = $this->_config['cache_dir'];
         $this->_smarty->left_delimiter = $this->_config['left_delimiter'];
         $this->_smarty->right_delimiter = $this->_config['right_delimiter'];
+
         $this->assign('this', $this);
     }
 }

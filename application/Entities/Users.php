@@ -2,6 +2,7 @@
 
 namespace Entities;
 
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,25 +37,9 @@ class Users
     private $password;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="hash", type="string", length=40, nullable=true)
-     */
-    private $hash;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_admin", type="boolean", nullable=false)
-     */
-    private $isAdmin = '0';
-
-
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -78,7 +63,7 @@ class Users
     /**
      * Get login
      *
-     * @return string 
+     * @return string
      */
     public function getLogin()
     {
@@ -102,7 +87,7 @@ class Users
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -110,50 +95,38 @@ class Users
     }
 
     /**
-     * Set hash
+     * Add books
      *
-     * @param string $hash
+     * @param \Entities\Books $books
      *
      * @return Users
      */
-    public function setHash($hash)
+    public function addBook(\Entities\Books $books)
     {
-        $this->hash = $hash;
+        $this->books[] = $books;
 
         return $this;
     }
 
     /**
-     * Get hash
+     * Remove books
      *
-     * @return string 
+     * @param \Entities\Books $books
      */
-    public function getHash()
+    public function removeBook(\Entities\Books $books)
     {
-        return $this->hash;
+        $this->books->removeElement($books);
     }
 
     /**
-     * Set isAdmin
+     * Get books
      *
-     * @param boolean $isAdmin
-     *
-     * @return Users
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setIsAdmin($isAdmin)
+    public function getBooks()
     {
-        $this->isAdmin = $isAdmin;
-
-        return $this;
+        return $this->books;
     }
 
-    /**
-     * Get isAdmin
-     *
-     * @return boolean 
-     */
-    public function getIsAdmin()
-    {
-        return $this->isAdmin;
-    }
 }
+

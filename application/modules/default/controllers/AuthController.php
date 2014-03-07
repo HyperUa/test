@@ -1,97 +1,77 @@
 <?php
 
+use \Task\Controller\Action;
 
-class AuthController extends Task_Controller_Action
+
+class AuthController extends Action
 {
-
 
     public function loginAction()
     {
-        //TODO: login;
-        d('--');
-        $form = $this->_getLoginForm();
-/*
-        $registry = Zend_Registry::getInstance();
-        $this->_em = $registry->entitymanager;
+        if(\Zend_Auth::getInstance()->hasIdentity()){
+            $this->addFlashMessage('Вы уже залогинены');
+            $this->goToHome();
+        }
 
-        $testEntity = new Model_Users;
-        $testEntity->setLogin('login');
-        $testEntity->setPassword('23123');
-        $this->_em->persist($testEntity);
-        $this->_em->flush();
+        $service = $this->getService('user');
+        $form = $service->getLoginForm();
 
+        // Check Valid
+        if ($this->getRequest()->isPost()) {
 
-
-        $book = $this->_em->getRepository('Model_Users')->findOneBy(array(
-            'id' => 1
-        ));
-        d($book);
-
-*/
-        if ($this->_request->isPost()) {
-
-            $formData = $this->_request->getPost();
+            $formData = $this->getRequest()->getPost();
 
             if ($form->isValid($formData)) {
 
-                $username = $form->getValue('userName');
-                $password = $form->getValue('password');
+                // Set values
+                if($service->login($form->getValue('login'), $form->getValue('password'))){
 
-                $User = $this->getEntityManager()->getRepository('Model_Users')->findOneBy(array(
-                    'login' => $username,
-                ));
-
-           // d($this->getEntityManager()->getRepository('users'));
-
-
-
-                d($result);
-
-
-                $authAdapter->setIdentity($username)
-                    ->setCredential(md5($password));
-
-                $auth = Zend_Auth::getInstance();
-
-                $result=$auth->authenticate($authAdapter);
-
-
-                $auth  = Zend_Auth::getInstance();
-                $authAdapter = $this->_getAuthAdapter($formData['userName'],$formData['password']);
-                $result = $auth->authenticate($authAdapter);
-                if (!$result->isValid()) {
-                    // все неправильно
-                    $form->setDescription('Неправильные имя или пароль');
-                    $form->populate($formData);
-                    $this->view->form = $form;
-                    return $this->render('index');
+                    if(($url = $this->getParam('url')) !== null){
+                        $this->_redirect(urldecode($url));
+                    }
+                    $this->goToHome();
                 }else{
-
-                    $currentUser = $authAdapter->getResultRowObject();
-                    Zend_Auth::getInstance()->getStorage()->write( $currentUser);
-                    return $this->_redirect('/');//залогинился,редирект на главную
+                    $this->addFlashMessage('Логин или пароль неверный');
                 }
-
-            } else {
-                $form->populate($formData);
             }
         }
 
         $this->view->form = $form;
     }
 
+
     public function logoutAction()
     {
-        //TODO: logout;
+        $service = $this->getService('user');
+        $service->logout();
+
         $this->goToHome();
     }
 
-    protected function _getLoginForm()
+
+    public function registrationAction()
     {
-        require_once APPLICATION_PATH . '/Forms/Auth/Login.php';
-        return new Form_Login();
+        $service = $this->getService('user');
+        $form = $service->getAuthForm();
+
+        // Check Valid
+        if ($this->getRequest()->isPost()) {
+
+            $formData = $this->getRequest()->getPost();
+
+            if ($form->isValid($formData)) {
+
+                $user = $service->addUser($form);
+
+                // Set values
+                if($service->login($user->getLogin(), $user->getPassword())){
+                    $this->goToHome();
+                }else{
+                    $this->addFlashMessage('Что-то пошло не так!');
+                }
+            }
+        }
+
+        $this->view->form = $form;
     }
-
-
-
 }

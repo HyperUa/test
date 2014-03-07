@@ -1,3 +1,41 @@
+span#stylefileinput-file
+{
+    position:relative;
+}
+
+span#stylefileinput-file span
+{
+    position:absolute;
+    display:block;
+    top:-2px;
+    overflow:hidden;
+    z-index:1;
+    width:75px;
+    height:24px;
+    opacity:0;
+    filter:alpha(opacity=0)
+}
+
+span#stylefileinput-file span input
+{
+    position:absolute;
+    left:-140px;
+    cursor:pointer
+}
+
+span#stylefileinput-file input.stylefileinput-button
+{
+    position:relative;
+    z-index:0
+}
+
+span#stylefileinput-file strong
+{
+    margin:0 10px
+}
+
+
+
 
 body {
     padding-bottom: 20px;
@@ -158,4 +196,33 @@ ul li.inline-list{
     margin-bottom: 20px;
     overflow: hidden;
     padding-bottom: 10px;
+}
+
+/* Form */
+form {
+    width: 280px;
+}
+form .errors {
+    font-size: 13px;
+    font-style: oblique;
+    margin: 0;
+    padding: 5px 0 0;
+}
+.block_element {
+    border-bottom: 1px solid #E5E5E5;
+    display: block;
+    margin-bottom: 10px;
+    overflow: hidden;
+    padding: 0 5px 10px;
+    width: 280px;
+}
+form .block_element > label {
+     color: #666666;
+}
+.block_element.submit {
+    border-bottom: 0 none;
+}
+.registr_description {
+    margin: 15px 0;
+    text-indent: 5px;
 }

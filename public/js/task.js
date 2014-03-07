@@ -18,11 +18,18 @@
                     block.addClass('hide');
                 }, Task.Message.options.delay);
             }
+        },
 
+        Form: {
+            initFormStyler: function(){
+                $('input, select').styler();
+            },
+
+            setFilePath: function(path, id){
+                $('#'+id+'-styler .jq-'+id+'__name').html(path);
+            }
         }
-
-
-
     }
+
 
 })(jQuery);
