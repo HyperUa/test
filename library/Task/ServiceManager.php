@@ -27,14 +27,14 @@ class ServiceManager
 
     /**
      * @return mixed
-     * @throws \Zend_Controller_Exception
+     * @throws \Zend_Exception
      */
     public function getServiceManager()
     {
         if(self::$service == null){
             $sm = \Zend_Registry::getInstance()->get('servicemanager');
             if(!$sm instanceof \Pimple){
-                throw new \Zend_Controller_Exception('Service Manager not found', 500);
+                throw new \Zend_Exception('Service Manager not found', 500);
             }
             self::$service = $sm;
         }
@@ -45,12 +45,12 @@ class ServiceManager
     /**
      * @param $service
      * @return mixed
-     * @throws Zend_Exception
+     * @throws \Zend_Exception
      */
     public function getService($service)
     {
         if (!$this->getServiceManager()->offsetExists($service)) {
-            throw new Zend_Exception("Сервис $service отсутствует");
+            throw new \Zend_Exception("Сервис $service отсутствует");
         }
 
         return $this->getServiceManager()->offsetGet($service);

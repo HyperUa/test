@@ -4,9 +4,9 @@ namespace Task\Service;
 
 use Zend_Config_Ini;
 
+
 Class Doctrine
 {
-
     public function getEntityManager()
     {
         $db_config  = new Zend_Config_Ini(APPLICATION_PATH . '/configs/db.ini', 'doctrine');

@@ -6,8 +6,6 @@ namespace Task;
 class JsInit
 {
     /**
-     * singleton storage
-     *
      * @var mixed
      * @access private
      */
@@ -87,7 +85,7 @@ class JsInit
      * addMethod function.
      * allows multiple arguments to be added, each of which get added to the Javascript method in the same order
      * @access public
-     * @return fluent interface
+     * @return JsInit
      */
     public function addMethod()
     {
@@ -118,7 +116,7 @@ class JsInit
      * addTopMethod function.
      * proxy to addMethod, prepends window.top.window
      * @access public
-     * @return fluent interface
+     * @return JsInit
      */
     public function addTopMethod()
     {
@@ -135,7 +133,7 @@ class JsInit
      * lock function.
      *
      * @access public
-     * @return fluent interface
+     * @return JsInit
      */
     public function lock()
     {
@@ -147,7 +145,7 @@ class JsInit
      * unlock function.
      *
      * @access public
-     * @return fluent interface
+     * @return JsInit
      */
     public function unlock()
     {
@@ -159,7 +157,7 @@ class JsInit
      * clearMethods function.
      *
      * @access public
-     * @return fluent interface
+     * @return JsInit
      */
     public function clearMethods()
     {
@@ -183,7 +181,7 @@ class JsInit
      * setNoUseDocumentReady function.
      *
      * @access public
-     * @return fluent interface
+     * @return JsInit
      */
     public function setNoUseDocumentReady()
     {
@@ -195,7 +193,7 @@ class JsInit
      * setUseDocumentReady function.
      *
      * @access public
-     * @return fluent interface
+     * @return JsInit
      */
     public function setUseDocumentReady()
     {

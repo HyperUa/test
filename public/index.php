@@ -1,44 +1,32 @@
 <?php
 
+/** Settings */
 error_reporting(E_ALL);
 ini_set('display_errors', true);
 ini_set('html_errors', true);
 ini_set('error_reporting', E_ALL ^ E_NOTICE);
 
 
-require_once(dirname(__FILE__) . '/../../vendor/autoload.php');
-
-
-function d($text)
-{
-    dd($text);
-    die('');
-}
-
-function dd($text)
-{
-    echo '<pre>';
-    var_dump($text);
-    echo '</pre>';
-}
-
+/** Defined */
+// Define path to current directory
 define('BASE_PATH', dirname(__FILE__));
 
 // Define path to application directory
 defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
+|| define('APPLICATION_PATH', realpath(BASE_PATH . '/../application'));
 
 // Define application environment
 defined('APPLICATION_ENV')
 || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
-define('APPLICATION_ENV', 'production');
 
-// Ensure library/ is on include_path
-set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(APPLICATION_PATH . '/../library'),
-    get_include_path(),
-)));
+/** Including */
+require_once(dirname(__FILE__) . '/../../vendor/autoload.php');
+
+if(APPLICATION_ENV == 'development'){
+    require_once(dirname(__FILE__). '/mydebug.php');
+}
+
 
 /** Zend_Application */
 //require_once 'Zend/Application.php';

@@ -11,9 +11,6 @@ use Forms\Book as Book_Form;
  */
 class Book extends Processor
 {
-    const EDIT = 'Редактировать';
-    const ADD = 'Добавить';
-
 
     /**
      * @return Entities\Books
@@ -22,6 +19,7 @@ class Book extends Processor
     {
         return new Entities\Books();
     }
+
 
     /**
      * @param Entities\Books $book
@@ -45,6 +43,7 @@ class Book extends Processor
 
         return $form;
     }
+
 
     /**
      * @param Entities\Books $book
@@ -116,16 +115,16 @@ class Book extends Processor
             $ext = pathinfo($fileInfo['file']['name'], PATHINFO_EXTENSION);
 
             $dir = $this->getBookPath($user);
-            if(!file_exists($dir)){
+            if (!file_exists($dir)) {
                 mkdir($dir);
             }
 
-            $name = microtime(true).'.'.$ext;
-            rename($fileInfo['file']['tmp_name'], $dir.$name);
+            $name = microtime(true) . '.' . $ext;
+            rename($fileInfo['file']['tmp_name'], $dir . $name);
 
             // Remove Old
-            if($book->getPath() != null){
-                unlink($dir .$book->getPath());
+            if ($book->getPath() != null) {
+                unlink($dir . $book->getPath());
             }
 
             $book->setPath($name);
@@ -141,21 +140,35 @@ class Book extends Processor
         return true;
     }
 
+
+    /**
+     * @param $id
+     * @return Entities\Books
+     * @throws \Zend_Controller_Exception
+     */
     public function getBookById($id)
     {
         $book = $this->getEntityManager()->getRepository('Entities\Books')->find($id);
 
-        if(!$book instanceof Entities\Books){
+        if (!$book instanceof Entities\Books) {
             throw new \Zend_Controller_Exception('Книга не найдена', 404);
         }
 
         return $book;
     }
 
+
+    /**
+     * Find book by current User id and Book id
+     *
+     * @param \Zend_Controller_Request_Abstract $request
+     * @return \Entities\Books
+     */
     public function getBookByIdAndUser(\Zend_Controller_Request_Abstract $request)
     {
-        if(($book_id = $request->getParam('id')) == null || !\Zend_Auth::getInstance()->hasIdentity())
+        if (($book_id = $request->getParam('id')) == null || !\Zend_Auth::getInstance()->hasIdentity()) {
             return false;
+        }
 
         return $this->getEntityManager()->getRepository('Entities\Books')->getBookByIdAndUser(
             $book_id,
@@ -164,6 +177,10 @@ class Book extends Processor
     }
 
 
+    /**
+     * Remove Book
+     * @param Entities\Books $book
+     */
     public function doRemove(\Entities\Books $book)
     {
         $em = $this->getEntityManager();
@@ -172,8 +189,35 @@ class Book extends Processor
     }
 
 
+    /**
+     * Get Book Path by User
+     *
+     * @param Entities\Users $user
+     * @return string
+     */
     public function getBookPath(\Entities\Users $user)
     {
-        return BASE_PATH.'/data/uploads/User_'.$user->getId().'/' ;
+        return BASE_PATH . \Zend_Registry::get('config')->upload_path . 'User_' . $user->getId() . '/';
+    }
+
+
+    /**
+     * @param int $page
+     * @param array $filter
+     * @return \Pagerfanta\Pagerfanta
+     */
+    public function getBooksList($page = 1, $filter = array())
+    {
+        $paginator = $this->getService('paginator');
+
+        $dql = 'SELECT b FROM \Entities\Books b ORDER BY b.id DESC';
+        $query = $this->getEntityManager()
+            ->createQuery($dql);
+
+        // Create Paginator
+        $pagerfanta = $paginator
+            ->getORMpagerFanta($query, $page, self::COUNT_PER_PAGE);
+
+        return $pagerfanta;
     }
 }

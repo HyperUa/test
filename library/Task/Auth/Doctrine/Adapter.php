@@ -4,8 +4,9 @@ namespace Task\Auth\Doctrine;
 
 use Task\ServiceManager;
 use Zend_Auth_Adapter_Interface;
-use Task\Manager;
 use Zend_Auth_Result;
+use Zend_Auth_Adapter_Exception;
+use Exception;
 
 
 class Adapter implements Zend_Auth_Adapter_Interface
@@ -39,14 +40,14 @@ class Adapter implements Zend_Auth_Adapter_Interface
                 $result = new Zend_Auth_Result(
                     Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND,
                     null,
-                    array('sorry, login ' . $this->username . ' was not found'));
+                    array('Логин ' . $this->username . ' не был найден'));
             } else {
                 if ($user->getPassword() != $this->password) {
                     $result = new Zend_Auth_Result(
                         Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
-                        $user,
+                        null,
                         array(
-                            'sorry, the password you entered was invalid for user ' .
+                            'Пароль неверный' .
                             $this->username
                         ));
                 } else {

@@ -1,12 +1,11 @@
 {
-    "require": {
-        "php": ">=5.3.0",
-        "zendframework/zendframework1": "~1.12",
-        "smarty/smarty": "3.1.*",
-        "doctrine/orm": "*",
-        "pimple/pimple" : "*",
-        "pagerfanta/pagerfanta" : "*"
-    },
+    "name": "Test/Task",
+
+    "authors": [
+        {
+            "name": "Sergey Miroshnikov"
+        }
+    ],
 
     "minimum-stability": "dev",
     "config": {
@@ -14,14 +13,19 @@
         "vendor-dir": "../vendor"
     },
 
-    "suggest": {
-        "doctrine/orm": ">=2.1"
-    },
-
-
     "autoload": {
         "psr-0": {
-            "": ["application/"]
-        }
+            "": ["application/", "library/"]
+        },
+        "files": ["application/configs/ServiceManagerInit.php"]
+    },
+
+    "require": {
+        "php": ">=5.3.0",
+        "zendframework/zendframework1": "~1.12",
+        "smarty/smarty": "3.1.*",
+        "doctrine/orm": "*",
+        "pagerfanta/pagerfanta" : "*",
+        "pimple/pimple" : "*"
     }
 }
