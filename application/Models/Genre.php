@@ -75,7 +75,7 @@ class Genre extends Processor
         return $genre;
     }
 
-    public function doRemove(\Entities\Genre $genre)
+    public function doRemove(\Entities\Genres $genre)
     {
         $em = $this->getEntityManager();
         $em->remove($genre);

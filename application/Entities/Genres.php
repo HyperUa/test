@@ -78,6 +78,17 @@ class Genres
     }
 
     /**
+     * Get genre
+     *
+     * @return string
+     */
+    public function getHTMLGenre()
+    {
+        return htmlspecialchars($this->genre);
+    }
+
+
+    /**
      * Add book
      *
      * @param \Entities\Books $book

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-07 12:47:22
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-10 11:43:35
          compiled from "/home/myproj/webapp/application/modules/default/views/scripts/layout.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1193071469530764b91fe7d0-03699331%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '3280f2383b56864527178e509ee2c67149a397c4' => 
     array (
       0 => '/home/myproj/webapp/application/modules/default/views/scripts/layout.tpl',
-      1 => 1394196412,
+      1 => 1394451813,
       2 => 'file',
     ),
   ),
@@ -47,23 +47,22 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 
 <body>
 
-    <div class="container">
-        <?php echo $_smarty_tpl->getSubTemplate ("header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
+<div class="container">
+    <?php echo $_smarty_tpl->getSubTemplate ("header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
 
-        <?php echo $_smarty_tpl->getSubTemplate ("messages.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
+    <?php echo $_smarty_tpl->getSubTemplate ("messages.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
 
 
-        <div class="row marketing">
-            <?php echo $_smarty_tpl->tpl_vars['this']->value->layout()->content;?>
-
-        </div>
-
-        <?php echo $_smarty_tpl->getSubTemplate ("footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
+    <div class="row marketing">
+        <?php echo $_smarty_tpl->tpl_vars['this']->value->layout()->content;?>
 
     </div>
 
-    <?php echo $_smarty_tpl->getSubTemplate ("script.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
+    <?php echo $_smarty_tpl->getSubTemplate ("footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
+
+</div>
+
+<?php echo $_smarty_tpl->getSubTemplate ("script.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
 
 </body>
-</html>
-<?php }} ?>
+</html><?php }} ?>

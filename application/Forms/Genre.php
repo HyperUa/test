@@ -22,7 +22,7 @@ class Genre extends Form
         // Название
         $name = new Zend_Form_Element_Text('genre');
         $name->setRequired(true)
-            ->setLabel('Имя автора:')
+            ->setLabel('Название жанра:')
             ->setDecorators($this->elementDecorators)
             ->setAttrib('class', 'col-lg-12')
             ->setErrorMessages(array(self::ERR_EMPTY_TITLE))

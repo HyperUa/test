@@ -17,6 +17,7 @@ class Auth extends Form
     const EMPTY_PASSWORD = 'Пароль не должен быть пустым';
     const ERR_PASSWORD = 'Пароль не валидный(min 6)';
     const ERR_PASSWORD_MATCH = 'Пароли не совпадают';
+    const ERR_LOGIN_WRONG = 'Логин должен быть минимум 4 символa';
 
 
     public function init()
@@ -31,7 +32,25 @@ class Auth extends Form
             ->setLabel('Логин:')
             ->setDecorators($this->elementDecorators)
             ->setAttrib('class', 'col-lg-12')
-            ->setErrorMessages(array(self::ERR_EMPTY_LOGIN))
+            ->setValidators(array(
+                array(
+                    'NotEmpty',
+                    false,
+                    array('messages' => array(Zend_Validate_NotEmpty::IS_EMPTY => self::ERR_EMPTY_LOGIN))
+                ),
+                array(
+                    'StringLength',
+                    false,
+                    array(
+                        'min' => 4,
+                        'max' => 20,
+                        'messages' => array(
+                            Zend_Validate_StringLength::INVALID => self::ERR_LOGIN_WRONG,
+                            Zend_Validate_StringLength::TOO_SHORT => self::ERR_LOGIN_WRONG
+                        )
+                    )
+                )
+            ))
         ;
 
         $pass = new Zend_Form_Element_Password('password');
@@ -88,9 +107,8 @@ class Auth extends Form
     public function isValid($data)
     {
         $isValid = parent::isValid($data);
-        $em = Manager::getInstance()->getEntityManager();
 
-        $dublicate = $em->getRepository('Entities\Users')->findOneByLogin($data['login']);
+        $dublicate = $this->getEntityManager()->getRepository('Entities\Users')->findOneByLogin($data['login']);
 
         if ($dublicate !== null) {
             $this->getElement('login')->setErrors(array(self::ERR_LOGIN_EXIST));

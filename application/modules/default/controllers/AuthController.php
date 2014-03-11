@@ -64,7 +64,7 @@ class AuthController extends Action
                 $user = $service->addUser($form);
 
                 // Set values
-                if($service->login($user->getLogin(), $user->getPassword())){
+                if($service->login($user->getLogin(), $user->getPassword(), false)){
                     $this->goToHome();
                 }else{
                     $this->addFlashMessage('Что-то пошло не так!');

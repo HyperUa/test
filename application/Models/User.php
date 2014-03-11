@@ -49,8 +49,9 @@ Class User extends Processor
      * @param $password
      * @return bool
      */
-    public function login($login, $password)
+    public function login($login, $password, $isMakeHash = true)
     {
+        $password = $isMakeHash ? $this->makeHash($password) : $password;
         $adapter = $this->getAuthAdapter(
             array(
                 'login'    => $login,
@@ -73,13 +74,19 @@ Class User extends Processor
         \Zend_Auth::getInstance()->clearIdentity();
     }
 
+    public function makeHash($string, $salt = null){
+        $salt = $salt == null ? 'some salt': $salt;
+
+        return md5(md5($string) + $salt);
+    }
+
     public function addUser(\Zend_Form $form)
     {
         $user = $this->createNewEntity();
         $values = $form->getValues();
 
         $user->setLogin($values['login']);
-        $user->setPassword($values['password']);
+        $user->setPassword($this->makeHash($values['password']));
 
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
@@ -98,14 +105,5 @@ Class User extends Processor
         }
 
         return $this->identityUser;
-    }
-
-    /**
-     * @param $id (int)
-     * @return bool
-     */
-    public function checkUserAccess($id)
-    {
-        return ($user = $this->getIdentityUser()) instanceof \Entities\Users && $user->getId() == $id;
     }
 }

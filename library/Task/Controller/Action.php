@@ -4,11 +4,19 @@ namespace Task\Controller;
 
 use Zend_Controller_Action as ZFAction;
 use Zend_Exception;
-use Task\Manager;
+use Task\ServiceManager;
 
 
 class Action extends ZFAction
 {
+
+    public function preDispatch()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->_layout->setLayout('ajax');
+        }
+    }
+
     /**
      * postDispatch Event
      */
@@ -17,14 +25,15 @@ class Action extends ZFAction
         if ($this->_helper->FlashMessenger->hasMessages()) {
             $this->view->flashMessenger = $this->_helper->FlashMessenger->getMessages();
         }
+
+        \Task\JsInit::getInstance()->addMethod('Task.Events.init');
     }
 
-    public function checkUserAccess($id)
+
+    public function denyPage()
     {
-        if(!$this->getService('user')->checkUserAccess($id)){
-            $this->addFlashMessage('У вас нет прав для просмотра данной страницы');
-            $this->goToHome();
-        }
+        $this->addFlashMessage('У вас нет прав для просмотра данной страницы');
+        $this->goToHome();
     }
 
     /**
@@ -58,7 +67,7 @@ class Action extends ZFAction
      */
     private function getManager()
     {
-        return Manager::getInstance();
+        return ServiceManager::getInstance();
     }
 
     /**

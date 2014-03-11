@@ -28,6 +28,46 @@
             setFilePath: function(path, id){
                 $('#'+id+'-styler .jq-'+id+'__name').html(path);
             }
+        },
+
+        Events:{
+
+            init: function(){
+                this.options();
+            },
+
+            options: function(){
+
+                $('.options').off()
+                    .on('mouseover', function(){
+                        el = $(this);
+                        el.addClass('active');
+                    })
+                    .on('mouseout', function(){
+                        el = $(this);
+                        el.removeClass('active');
+                    })
+            }
+        },
+
+        Paginator:{
+
+            initAjax: function(content){
+
+                var content = $(content + ':first');
+
+                $('.pagerfanta a').off().on('click', function(){
+                    var a = $(this);
+                    content.css('opacity', 0.6);
+
+                    $.post(a.attr('href'), function( data ) {
+                        content.html(data);
+                        content.css('opacity', 1);
+                    });
+
+                    return false;
+                })
+            }
         }
     }
 

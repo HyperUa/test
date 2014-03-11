@@ -11,15 +11,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class BookRepository extends EntityRepository
 {
-    public function getBook(){
-       return 'a';
-    }
 
-
-/*
-    public function getAllAdminUsers()
+    public function getBookByIdAndUser($book_id, $user_id)
     {
-        return $this->_em->createQuery('SELECT u FROM Model\User u WHERE u.status = "admin"')
-            ->getResult();
-    }*/
+        return $this->_em->getRepository('Entities\Books')->findOneBy(array(
+            'id'   => $book_id,
+            'user' => $user_id
+        ));
+    }
 }

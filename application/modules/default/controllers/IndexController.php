@@ -11,17 +11,11 @@ class IndexController extends Action
     public function indexAction()
     {
         $page = $this->getParam('page', 1);
-        $paginator = $this->getService('paginator');
 
-        $dql = 'SELECT b FROM \Entities\Books b ORDER BY b.id DESC';
-        $query = $this->getEntityManager()
-            ->createQuery($dql);
-
-        // Create Paginator
-        $pagerfanta = $paginator
-            ->getORMpagerFanta($query, $page, self::COUNT_PER_PAGE);
-
+        $pagerfanta = $this->getService('bodok')->getBooksList($page);
         $this->view->pagerfanta = $pagerfanta;
+
+        \Task\JsInit::getInstance()->addMethod('Task.Paginator.initAjax', '.row.marketing');
     }
 
 
@@ -55,11 +49,12 @@ class IndexController extends Action
 
     public function editAction()
     {
-        $id = $this->getParam('id');
         $service = $this->getService('book');
-        $book    = $service->getBookById($id);
+        $book    = $service->getBookByIdAndUser($this->getRequest());
 
-        $this->checkUserAccess($book->getUser()->getId());
+        if(!$book instanceof \Entities\Books){
+            $this->denyPage();
+        }
 
         // Get form with
         $form = $service->getForm($book, $service::EDIT);
@@ -106,11 +101,13 @@ class IndexController extends Action
 
     public function deleteAction()
     {
-        $id = $this->getParam('id');
         $service = $this->getService('book');
-        $book    = $service->getBookById($id);
+        $book    = $service->getBookByIdAndUser($this->getRequest());
 
-        $this->checkUserAccess($book->getUser()->getId());
+        if(!$book instanceof \Entities\Books){
+            $this->denyPage();
+        }
+
         $service->doRemove($book);
 
         $this->addFlashMessage('Книга удалена');

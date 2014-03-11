@@ -78,6 +78,17 @@ class Authors
     }
 
     /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getHTMLName()
+    {
+        return htmlspecialchars($this->name);
+    }
+
+
+    /**
      * Add book
      *
      * @param \Entities\Books $book
