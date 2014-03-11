@@ -8,14 +8,15 @@ use Forms\Author as Author_Form;
 
 Class Author extends Processor
 {
-    const EDIT = 'Редактировать';
-    const ADD = 'Добавить';
 
-
+    /**
+     * @return Authors
+     */
     public function createNewEntity()
     {
         return new Authors();
     }
+
 
     /**
      * @param Authors $genre
@@ -35,6 +36,7 @@ Class Author extends Processor
         return $form;
     }
 
+
     /**
      * @param Authors $genre
      * @param \Zend_Form $form
@@ -53,6 +55,7 @@ Class Author extends Processor
         return true;
     }
 
+
     /**
      * @param $id
      * @return mixed
@@ -69,10 +72,34 @@ Class Author extends Processor
         return $genre;
     }
 
+    /**
+     * Remove Author
+     * @param Authors $author
+     */
     public function doRemove(\Entities\Authors $author)
     {
         $em = $this->getEntityManager();
         $em->remove($author);
         $em->flush();
+    }
+
+    /**
+     * @param int $page
+     * @param array $filter
+     * @return \Pagerfanta\Pagerfanta
+     */
+    public function getAuthorsList($page = 1, $filter = array())
+    {
+        $paginator = $this->getService('paginator');
+
+        $dql = 'SELECT a FROM \Entities\Authors a ORDER BY a.id DESC';
+        $query = $this->getEntityManager()
+            ->createQuery($dql);
+
+        // Create Paginator
+        $pagerfanta = $paginator
+            ->getORMpagerFanta($query, $page, self::COUNT_PER_PAGE);
+
+        return $pagerfanta;
     }
 }

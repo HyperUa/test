@@ -17,9 +17,7 @@ class Action extends ZFAction
         }
     }
 
-    /**
-     * postDispatch Event
-     */
+    
     public function postDispatch()
     {
         if ($this->_helper->FlashMessenger->hasMessages()) {
@@ -63,7 +61,7 @@ class Action extends ZFAction
     }
 
     /**
-     * @return Manager
+     * @return ServiceManager
      */
     private function getManager()
     {

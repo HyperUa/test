@@ -5,23 +5,14 @@ use Task\Controller\Action;
 
 class GenresController extends Action
 {
-    const COUNT_PER_PAGE = 5;
-
-
     public function indexAction()
     {
         $page = $this->getParam('page', 1);
-        $paginator = $this->getService('paginator');
 
-        $dql = 'SELECT g FROM \Entities\Genres g ORDER BY g.id DESC';
-        $query = $this->getEntityManager()
-            ->createQuery($dql);
-
-        // Create Paginator
-        $pagerfanta = $paginator
-            ->getORMpagerFanta($query, $page, self::COUNT_PER_PAGE);
-
+        $pagerfanta = $this->getService('genre')->getGenresList($page);
         $this->view->pagerfanta = $pagerfanta;
+
+        \Task\JsInit::getInstance()->addMethod('Task.Paginator.initAjax', '.row.marketing');
     }
 
 

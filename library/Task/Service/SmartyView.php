@@ -1,11 +1,13 @@
 <?php
 
+namespace Task\Service;
 
-class Smarty_View extends Zend_View_Abstract
+
+class SmartyView extends \Zend_View_Abstract
 {
     /**
      * Instance of Smarty
-     * @var Smarty
+     * @var \Smarty
      */
     protected $_smarty = null;
 
@@ -41,7 +43,7 @@ class Smarty_View extends Zend_View_Abstract
     /**
      * Return the template engine object
      *
-     * @return Smarty
+     * @return \Smarty
      */
     public function getEngine()
     {
@@ -66,17 +68,19 @@ class Smarty_View extends Zend_View_Abstract
 
             $this->_smarty->display($template);
         } else {
-            throw new Zend_View_Exception('Cannot render view without any template being assigned or file does not exist');
+            throw new \Zend_View_Exception('Cannot render view without any template being assigned or file does not exist');
         }
     }
 
+
     /**
      * Overwrite assign() method
-     *
      * The next part is an overwrite of the assign() method from Zend_View_Abstract, which works in a similar way. The big difference is that the values are assigned to the Smarty object and not to the $this->_vars variables array of Zend_View_Abstract.
      *
-     * @param string|array $var
-     * @return Smarty_View
+     * @param array|string $var
+     * @param null $value
+     * @return $this|\Zend_View_Abstract
+     * @throws \Zend_View_Exception
      */
     public function assign($var, $value = null)
     {
@@ -87,7 +91,7 @@ class Smarty_View extends Zend_View_Abstract
                 $this->assign($key, $value);
             }
         } else {
-            throw new Zend_View_Exception('assign() expects a string or array, got ' . gettype($var));
+            throw new \Zend_View_Exception('assign() expects a string or array, got ' . gettype($var));
         }
         return $this;
     }
@@ -146,7 +150,7 @@ class Smarty_View extends Zend_View_Abstract
      * Enable/disable caching
      *
      * @param bool $caching
-     * @return Smarty_View
+     * @return SmartyView
      */
     public function setCaching($caching)
     {
@@ -166,7 +170,7 @@ class Smarty_View extends Zend_View_Abstract
     /**
      * Template filename setter
      * @param string
-     * @return Smarty_View
+     * @return SmartyView
      */
     public function setTemplate($tpl)
     {
@@ -235,7 +239,7 @@ class Smarty_View extends Zend_View_Abstract
      * Updates Smarty's template_dir field with new value
      *
      * @param string $dir
-     * @return Smarty_View
+     * @return SmartyView
      */
     public function setTemplateDir($dir)
     {
@@ -247,7 +251,7 @@ class Smarty_View extends Zend_View_Abstract
      * Adds another Smarty template_dir to scan for templates
      *
      * @param string $dir
-     * @return Smarty_View
+     * @return SmartyView
      */
     public function addTemplateDir($dir)
     {
@@ -259,7 +263,7 @@ class Smarty_View extends Zend_View_Abstract
      * Adds another Smarty plugin directory to scan for plugins
      *
      * @param string $dir
-     * @return Smarty_View
+     * @return SmartyView
      */
     public function addPluginDir($dir)
     {
@@ -271,7 +275,7 @@ class Smarty_View extends Zend_View_Abstract
      * Zend_View compatibility. Removes all template vars
      *
      * @see View/Zend_View_Abstract::clearVars()
-     * @return Smarty_View
+     * @return SmartyView
      */
     public function clearVars()
     {
@@ -284,7 +288,9 @@ class Smarty_View extends Zend_View_Abstract
      * Zend_View compatibility. Add the templates dir
      *
      * @see View/Zend_View_Abstract::addBasePath()
-     * @return Smarty_View
+     * @param string $path
+     * @param string $classPrefix
+     * @return $this
      */
     public function addBasePath($path, $classPrefix = 'Zend_View')
     {
@@ -297,8 +303,9 @@ class Smarty_View extends Zend_View_Abstract
     /**
      * Zend_View compatibility. Set the templates dir instead of scripts
      *
-     * @see View/Zend_View_Abstract::setBasePath()
-     * @return Smarty_View
+     * @param string $path
+     * @param string $classPrefix
+     * @return $this|\Zend_View_Abstract
      */
     public function setBasePath($path, $classPrefix = 'Zend_View')
     {
@@ -319,15 +326,15 @@ class Smarty_View extends Zend_View_Abstract
     /**
      * Initializes the smarty and populates config params
      *
-     * @throws Zend_View_Exception
+     * @throws \Zend_View_Exception
      * @return void
      */
     private function _loadSmarty()
     {
-        $this->_smarty = new Smarty();
+        $this->_smarty = new \Smarty();
 
         if ($this->_config === null) {
-            throw new Zend_View_Exception("Could not locate Smarty config - node 'smarty' not found");
+            throw new \Zend_View_Exception("Could not locate Smarty config - node 'smarty' not found");
         }
 
         $this->_smarty->caching = $this->_config['caching'];

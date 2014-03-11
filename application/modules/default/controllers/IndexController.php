@@ -5,14 +5,11 @@ use Task\Controller\Action;
 
 class IndexController extends Action
 {
-    const COUNT_PER_PAGE = 5;
-
-
     public function indexAction()
     {
         $page = $this->getParam('page', 1);
 
-        $pagerfanta = $this->getService('bodok')->getBooksList($page);
+        $pagerfanta = $this->getService('book')->getBooksList($page);
         $this->view->pagerfanta = $pagerfanta;
 
         \Task\JsInit::getInstance()->addMethod('Task.Paginator.initAjax', '.row.marketing');

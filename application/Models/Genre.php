@@ -11,9 +11,7 @@ use Forms\Genre as Genre_Form;
  */
 class Genre extends Processor
 {
-    const EDIT = 'Редактировать';
-    const ADD = 'Добавить';
-
+    const COUNT_PER_PAGE = 3;
 
     /**
      * @return Entities\Genres
@@ -75,10 +73,34 @@ class Genre extends Processor
         return $genre;
     }
 
+    /**
+     * Remove Genre
+     * @param Entities\Genres $genre
+     */
     public function doRemove(\Entities\Genres $genre)
     {
         $em = $this->getEntityManager();
         $em->remove($genre);
         $em->flush();
+    }
+
+    /**
+     * @param int $page
+     * @param array $filter
+     * @return \Pagerfanta\Pagerfanta
+     */
+    public function getGenresList($page = 1, $filter = array())
+    {
+        $paginator = $this->getService('paginator');
+
+        $dql = 'SELECT g FROM \Entities\Genres g ORDER BY g.id DESC';
+        $query = $this->getEntityManager()
+            ->createQuery($dql);
+
+        // Create Paginator
+        $pagerfanta = $paginator
+            ->getORMpagerFanta($query, $page, self::COUNT_PER_PAGE);
+
+        return $pagerfanta;
     }
 }

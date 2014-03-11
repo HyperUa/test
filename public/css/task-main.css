@@ -64,6 +64,9 @@ body {
     font-size: 20px;
     margin: 0 0 15px;
 }
+#messanger p {
+    margin: 10px 0;
+}
 
 .add_new {
     float: right;
@@ -214,7 +217,7 @@ ul li.inline-list{
     border-bottom: 0 solid;
 }
 .options .options-list {
-    background: none repeat scroll 0 0 #E6E6E6;
+    background: none repeat scroll 0 0 #EEEEEE;
     border: 1px solid #D3D3D3;
     border-radius: 4px 0 4px 4px;
     display: block;
@@ -226,7 +229,7 @@ ul li.inline-list{
     display: none;
 }
 .options-list:after {
-    border-top: 1px solid #E6E6E6;
+    border-top: 1px solid #EEEEEE;
     content: "";
     position: absolute;
     right: 0;
