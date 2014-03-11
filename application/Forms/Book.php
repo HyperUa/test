@@ -46,7 +46,7 @@ class Book extends Form
 
     public function init()
     {
-        $upload_path = $this->getService('front_controller')->getParam('bootstrap')->getOption('upload_path');
+        $upload_path = \Zend_Registry::get('config')->upload_path;
 
         $this
             ->setMethod('post')
@@ -74,7 +74,7 @@ class Book extends Form
             ;
 
             foreach ($genres as $genre) {
-                $inputGenre->addMultiOption($genre->getId(), $genre->getGenre());
+                $inputGenre->addMultiOption($genre->getId(), $genre->getHTMLGenre());
             }
         }
 
@@ -90,7 +90,7 @@ class Book extends Form
             ;
 
             foreach ($authors as $author) {
-                $inputAuthor->addMultiOption($author->getId(), $author->getName());
+                $inputAuthor->addMultiOption($author->getId(), $author->getHTMLName());
             }
         }
 

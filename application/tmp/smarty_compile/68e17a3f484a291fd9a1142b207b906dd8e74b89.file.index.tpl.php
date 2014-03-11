@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-07 16:48:03
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-11 08:40:54
          compiled from "/home/myproj/webapp/application/modules/default/views/templates/index/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1405752683530764b9049bf5-33655909%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '68e17a3f484a291fd9a1142b207b906dd8e74b89' => 
     array (
       0 => '/home/myproj/webapp/application/modules/default/views/templates/index/index.tpl',
-      1 => 1394210881,
+      1 => 1394527252,
       2 => 'file',
     ),
   ),
@@ -23,14 +23,15 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'hasAuth' => 0,
     'pagerfanta' => 0,
     'book' => 0,
+    'id' => 0,
     'ganre' => 0,
     'author' => 0,
-    'id' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_530764b91327e8_12246374')) {function content_530764b91327e8_12246374($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['hasAuth'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->auth()->hasIdentity(), null, 0);?>
 <?php $_smarty_tpl->tpl_vars['id'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->auth()->getIdentity(), null, 0);?>
+
 
 <div class="col-lg-12">
 
@@ -51,8 +52,36 @@ $_smarty_tpl->tpl_vars['book']->_loop = true;
 ?>
             <li class="task_list">
 
-                <h4><?php echo $_smarty_tpl->tpl_vars['book']->value->getName();?>
+                <h4><?php echo $_smarty_tpl->tpl_vars['book']->value->getHTMLName();?>
 </h4>
+
+                <?php if ($_smarty_tpl->tpl_vars['hasAuth']->value) {?>
+                    <div class="options ui-state-default ui-corner-all">
+                        <div class="options-list">
+                            <?php if ($_smarty_tpl->tpl_vars['id']->value==$_smarty_tpl->tpl_vars['book']->value->getUser()->getId()) {?>
+                                <div class="option">
+                                    <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'delete'),'book_opt');?>
+">Delete</a>
+                                </div>
+
+                                <div class="option" title=".ui-icon-wrench">
+                                    <a title="Редактировать" href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
+"></a>
+                                </div>
+
+                                <div class="option">
+                                    <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
+">Edit</a>
+                                </div>
+                            <?php }?>
+                            <div class="option">
+                                <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'download'),'book_opt');?>
+">Download</a>
+                            </div>
+                        </div>
+                        <span class="ui-icon ui-icon-wrench"></span>
+                    </div>
+                <?php }?>
 
                 <ul class="books_list_data">
 
@@ -64,7 +93,7 @@ $_smarty_tpl->tpl_vars['book']->_loop = true;
 foreach ($_from as $_smarty_tpl->tpl_vars['ganre']->key => $_smarty_tpl->tpl_vars['ganre']->value) {
 $_smarty_tpl->tpl_vars['ganre']->_loop = true;
 ?>
-                                <li><?php echo $_smarty_tpl->tpl_vars['ganre']->value->getGenre();?>
+                                <li><?php echo $_smarty_tpl->tpl_vars['ganre']->value->getHTMLGenre();?>
 </li>
                             <?php } ?>
 
@@ -82,7 +111,7 @@ $_smarty_tpl->tpl_vars['ganre']->_loop = true;
 foreach ($_from as $_smarty_tpl->tpl_vars['author']->key => $_smarty_tpl->tpl_vars['author']->value) {
 $_smarty_tpl->tpl_vars['author']->_loop = true;
 ?>
-                                <li><?php echo $_smarty_tpl->tpl_vars['author']->value->getName();?>
+                                <li><?php echo $_smarty_tpl->tpl_vars['author']->value->getHTMLName();?>
 </li>
                             <?php } ?>
 
@@ -91,37 +120,6 @@ $_smarty_tpl->tpl_vars['author']->_loop = true;
                             <?php }?>
                         </ul>
                     </li>
-
-                    <?php if ($_smarty_tpl->tpl_vars['hasAuth']->value) {?>
-                    <li class="books_list_options">
-                        <div class="task_list_options">
-                            <ul class="inline-list">
-                                <?php if ($_smarty_tpl->tpl_vars['id']->value==$_smarty_tpl->tpl_vars['book']->value->getUser()->getId()) {?>
-                                    <li>
-                                        <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'delete'),'book_opt');?>
-">Delete</a>
-                                    </li>
-
-                                    <li class="ui-state-default ui-corner-all" title=".ui-icon-wrench">
-                                        <a title="Редактировать" href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
-">
-                                            <span class="ui-icon ui-icon-wrench"></span>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
-">Edit</a>
-                                    </li>
-                                <?php }?>
-                                <li>
-                                    <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'download'),'book_opt');?>
-">Download</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <?php }?>
                 </ul>
             </li>
         <?php } ?>

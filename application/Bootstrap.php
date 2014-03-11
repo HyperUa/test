@@ -33,19 +33,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
 
 
-    public function _initRegistry()
-    {
-        return Zend_Registry::getInstance();
-    }
-
-
     public function _initServiceManager()
     {
-        $this->bootstrap('registry');
         require_once APPLICATION_PATH . '/configs/ServiceManagerInit.php';
         $serviceManager = new ServiceManagerInit($this);
 
         return $serviceManager;
+    }
+
+    protected function _initConfig()
+    {
+        $config = new Zend_Config($this->getOptions(), true);
+        Zend_Registry::set('config', $config);
+        return $config;
     }
 }
 

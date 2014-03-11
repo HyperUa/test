@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Books
  *
  * @ORM\Table(name="books", indexes={@ORM\Index(name="books_ibfk_1", columns={"user_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Repository\BookRepository")
  */
 class Books
 {
@@ -122,6 +122,16 @@ class Books
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getHTMLName()
+    {
+        return htmlspecialchars($this->name);
     }
 
     /**

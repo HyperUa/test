@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-02-24 13:34:18
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-07 13:30:39
          compiled from "/home/myproj/webapp/application/modules/default/views/templates/index/edit.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:78107022253076d319b3709-49975430%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '400a934c7565a51d1e47251dc8a4dd0b3b1cb5d2' => 
     array (
       0 => '/home/myproj/webapp/application/modules/default/views/templates/index/edit.tpl',
-      1 => 1393248861,
+      1 => 1394199030,
       2 => 'file',
     ),
   ),
@@ -23,6 +23,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_53076d31a5ec71_58528384')) {function content_53076d31a5ec71_58528384($_smarty_tpl) {?><div class="title">Редактирование книги:</div>
-<?php echo $_smarty_tpl->tpl_vars['form']->value;?>
-<?php }} ?>
+<?php if ($_valid && !is_callable('content_53076d31a5ec71_58528384')) {function content_53076d31a5ec71_58528384($_smarty_tpl) {?><div class="form-page">
+    <div class="title">Редактирование книги:</div>
+    <?php echo $_smarty_tpl->tpl_vars['form']->value;?>
+
+</div><?php }} ?>

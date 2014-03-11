@@ -13,26 +13,6 @@ class ServiceManagerInit
     {
         $pimple = new Pimple;
 
-        // Register Front Controller
-        $pimple['front_controller'] = Zend_Controller_Front::getInstance();
-
-        // Register Entity Request
-        $pimple['request'] = function ($c){
-            return $c->offsetGet('front_controller')->getRequest();
-        };
-
-        // Register Entity Response
-        $pimple['response'] = function ($c){
-            return $c->offsetGet('front_controller')->getResponse();
-        };
-
-        // Register Bootstrap
-        $pimple['bootstrap'] = function ($c){
-            return $c->offsetGet('front_controller')->getParam('bootstrap');
-        };
-
-
-
         // Register Entity Manager
         $pimple['em'] = function ($c){
             $doctrine = new Task\Service\Doctrine($c);
@@ -63,6 +43,7 @@ class ServiceManagerInit
             return new \Task\Service\Paginator($c);
         };
 
-        Zend_Registry::set('servicemanager', $pimple);
+        $sm = \Task\ServiceManager::getInstance();
+        $sm::setServiceManager($pimple);
     }
 }

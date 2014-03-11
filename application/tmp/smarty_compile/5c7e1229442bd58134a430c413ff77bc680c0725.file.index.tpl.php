@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-06 16:03:58
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-11 08:40:28
          compiled from "/home/myproj/webapp/application/modules/default/views/templates/authors/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:175857480530c61d9c1b760-24199012%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '5c7e1229442bd58134a430c413ff77bc680c0725' => 
     array (
       0 => '/home/myproj/webapp/application/modules/default/views/templates/authors/index.tpl',
-      1 => 1394121841,
+      1 => 1394527226,
       2 => 'file',
     ),
   ),
@@ -47,7 +47,7 @@ $_smarty_tpl->tpl_vars['author']->_loop = true;
 ?>
             <li class="task_list two-col">
                 <div class="left-col">
-                    <h4><?php echo $_smarty_tpl->tpl_vars['author']->value->getName();?>
+                    <h4><?php echo $_smarty_tpl->tpl_vars['author']->value->getHTMLName();?>
 </h4>
                 </div>
 

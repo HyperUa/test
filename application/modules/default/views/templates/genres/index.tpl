@@ -14,7 +14,7 @@
         {foreach from = $pagerfanta item=genre}
         <li class="task_list two-col">
             <div class="left-col">
-                <h4>{$genre->getGenre()}</h4>
+                <h4>{$genre->getHTMLGenre()}</h4>
             </div>
 
             {if $hasAuth}

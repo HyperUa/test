@@ -2,7 +2,7 @@
 
 namespace Task;
 
-class Manager
+class ServiceManager
 {
     protected static $service;
 
@@ -15,6 +15,14 @@ class Manager
     public static function getInstance()
     {
         return new self;
+    }
+
+    public static function setServiceManager(\Pimple $sm)
+    {
+        if(self::$service == null)
+        {
+            self::$service = $sm;
+        }
     }
 
     /**

@@ -152,6 +152,17 @@ class Book extends Processor
         return $book;
     }
 
+    public function getBookByIdAndUser(\Zend_Controller_Request_Abstract $request)
+    {
+        if(($book_id = $request->getParam('id')) == null || !\Zend_Auth::getInstance()->hasIdentity())
+            return false;
+
+        return $this->getEntityManager()->getRepository('Entities\Books')->getBookByIdAndUser(
+            $book_id,
+            \Zend_Auth::getInstance()->getIdentity()
+        );
+    }
+
 
     public function doRemove(\Entities\Books $book)
     {

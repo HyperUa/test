@@ -91,20 +91,25 @@ ul li.inline-list{
 }
 .books_list_data .books_list_genre, .books_list_data .books_list_authors {
     float: left;
-    width: 40% !important;
+    width: 50% !important;
 }
 .books_list_data .books_list_genre ul li, .books_list_data .books_list_authors ul li{
     text-indent: 30px;
 }
-#paginator > li {
+
+
+.pagerfanta nav > span, .pagerfanta nav > a {
+    display: block;
     float: left;
     height: 30px;
     line-height: 30px;
+    min-width: 30px;
     overflow: hidden;
     padding: 0 2px;
+    text-align: center;
     width: auto;
 }
-#paginator span.active,  #paginator a:hover{
+.pagerfanta nav span.current,  .pagerfanta nav a:hover{
     background-color: #428BCA;
     border-radius: 5px;
     color: #FFFFFF;
@@ -113,17 +118,13 @@ ul li.inline-list{
     text-align: center;
     display: block;
 }
-#paginator a {
+.pagerfanta nav a {
     display: block;
     min-width: 30px;
     text-align: center;
 }
-#paginator a.page-next{
-    width: 40px;
-}
-.page-prev {
-    width: 65px;
-}
+
+
 #name-element, #genres-element, #authors-element {
     margin-bottom: 15px;
     padding-bottom: 10px;
@@ -192,11 +193,54 @@ ul li.inline-list{
 
 
 .task_list {
+    position: relative;
     border-bottom: 1px solid #999999;
     margin-bottom: 20px;
     overflow: hidden;
     padding-bottom: 10px;
 }
+.options {
+    background-color: #FF0000;
+    height: 30px;
+    position: absolute;
+    right: 10px;
+    text-indent: -9999px;
+    top: 5px;
+    width: 30px;
+}
+.options.active{
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 0 solid;
+}
+.options .options-list {
+    background: none repeat scroll 0 0 #E6E6E6;
+    border: 1px solid #D3D3D3;
+    border-radius: 4px 0 4px 4px;
+    display: block;
+    padding: 3px 10px;
+    position: absolute;
+    right: -1px;
+    text-indent: 0;
+    top: 29px;
+    display: none;
+}
+.options-list:after {
+    border-top: 1px solid #E6E6E6;
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -1px;
+    width: 29px;
+}
+.options.active .options-list{
+    display: block;
+}
+.options .options-list a{display:block}
+.options .options-list a:hover{
+    color: #999999;
+}
+
 
 /* Form */
 form {

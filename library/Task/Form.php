@@ -85,26 +85,17 @@ Class Form extends Zend_Form
     }
 
     /**
-     * @return \Pimple
+     * @return \Task\ServiceManager
      */
     public function getServiceManager()
     {
-        return \Zend_Registry::get('servicemanager');
+        return \Task\ServiceManager::getInstance();
     }
 
 
-    /**
-     * @param $service
-     * @return mixed
-     * @throws \Zend_Exception
-     */
     public function getService($service)
     {
-        if (!$this->getServiceManager()->offsetExists($service)) {
-            throw new Zend_Exception("Сервис $service отсутствует");
-        }
-
-        return $this->getServiceManager()->offsetGet($service);
+        return $this->getServiceManager()->getService($service);
     }
 
 
@@ -120,7 +111,7 @@ Class Form extends Zend_Form
     protected function convertEntityToArray($entity)
     {
         $data = array();
-        $metadata = Zend_Registry::get('servicemanager')->offsetGet('em')->getClassMetadata(get_class($entity));
+        $metadata = $this->getEntityManager()->getClassMetadata(get_class($entity));
 
         foreach ($metadata->fieldMappings as $field => $mapping) {
             $value = $metadata->reflFields[$field]->getValue($entity);

@@ -14,7 +14,7 @@
         {foreach from = $pagerfanta item=author}
             <li class="task_list two-col">
                 <div class="left-col">
-                    <h4>{$author->getName()}</h4>
+                    <h4>{$author->getHTMLName()}</h4>
                 </div>
 
                 {if $hasAuth}

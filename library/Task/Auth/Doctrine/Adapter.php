@@ -2,6 +2,7 @@
 
 namespace Task\Auth\Doctrine;
 
+use Task\ServiceManager;
 use Zend_Auth_Adapter_Interface;
 use Task\Manager;
 use Zend_Auth_Result;
@@ -29,7 +30,7 @@ class Adapter implements Zend_Auth_Adapter_Interface
         $result = null;
 
         try {
-            $user = Manager::getInstance()
+            $user = ServiceManager::getInstance()
                 ->getEntityManager()
                 ->getRepository('Entities\Users')
                 ->findOneBy(array('login' => $this->username));

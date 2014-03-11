@@ -22,17 +22,17 @@
 
 <body>
 
-    <div class="container">
-        {include file="header.tpl"}
-        {include file="messages.tpl"}
+<div class="container">
+    {include file="header.tpl"}
+    {include file="messages.tpl"}
 
-        <div class="row marketing">
-            {$this->layout()->content}
-        </div>
-
-        {include file="footer.tpl"}
+    <div class="row marketing">
+        {$this->layout()->content}
     </div>
 
-    {include file="script.tpl"}
+    {include file="footer.tpl"}
+</div>
+
+{include file="script.tpl"}
 </body>
 </html>

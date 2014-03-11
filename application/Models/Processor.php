@@ -10,13 +10,13 @@ abstract class Processor
 
     protected function getEntityManager()
     {
-        return \Task\Manager::getInstance()->getEntityManager();
+        return $this->getService('em');
     }
 
 
     protected function getService($service)
     {
-        return \Task\Manager::getInstance()->getService($service);
+        return \Task\ServiceManager::getInstance()->getService($service);
     }
 
 }
