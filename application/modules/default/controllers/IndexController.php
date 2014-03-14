@@ -9,20 +9,21 @@ class IndexController extends Action
     {
         $page = $this->getParam('page', 1);
 
-        $pagerfanta = $this->getService('book')->getBooksList($page);
+        $pagerfanta = $this->getModel('book')->getBooksList($page);
         $this->view->pagerfanta = $pagerfanta;
 
-        \Task\JsInit::getInstance()->addMethod('Task.Paginator.initAjax', '.row.marketing');
+        $this->getJsInit()->addMethod('Task.Paginator.initAjax', '.container > .marketing');
     }
 
 
     public function addAction()
     {
-        $service = $this->getService('book');
-        $book    = $service->createNewEntity();
+        /** @var \Models\Book $model */
+        $model = $this->getModel('book');
+        $book    = $model->createNewEntity();
 
         // Get form with
-        $form = $service->getForm($book, $service::ADD);
+        $form = $model->getForm($book, $model::ADD);
 
         // Check Valid
         if ($this->getRequest()->isPost()) {
@@ -32,7 +33,7 @@ class IndexController extends Action
             if ($form->isValid($formData)) {
 
                 // Set values
-                $service->editBook($book, $form, $service::ADD);
+                $model->editBook($book, $form, $model::ADD);
 
                 $this->addFlashMessage('Книга была добавлена');
                 $this->goToHome();
@@ -46,15 +47,16 @@ class IndexController extends Action
 
     public function editAction()
     {
-        $service = $this->getService('book');
-        $book    = $service->getBookByIdAndUser($this->getRequest());
+        /** @var \Models\Book $model */
+        $model = $this->getModel('book');
+        $book  = $model->getBookByIdAndUser($this->getRequest());
 
         if(!$book instanceof \Entities\Books){
             $this->denyPage();
         }
 
         // Get form with
-        $form = $service->getForm($book, $service::EDIT);
+        $form = $model->getForm($book, $model::EDIT);
 
         // Check Valid
         if ($this->getRequest()->isPost()) {
@@ -64,7 +66,7 @@ class IndexController extends Action
             if ($form->isValid($formData)) {
 
                 // Set values
-                $service->editBook($book, $form, $service::EDIT);
+                $model->editBook($book, $form, $model::EDIT);
 
                 $this->addFlashMessage('Книга была отредактирована');
                 $this->goToHome();
@@ -78,10 +80,12 @@ class IndexController extends Action
     public function downloadAction()
     {
         $id = $this->getParam('id');
-        $service = $this->getService('book');
-        $book    = $service->getBookById($id);
 
-        $path = $service->getBookPath($book->getUser());
+        /** @var \Models\Book $model */
+        $model = $this->getModel('book');
+        $book    = $model->getBookById($id);
+
+        $path = $model->getBookPath($book->getUser());
         $fileFullName = $path . $book->getPath();
 
         if(file_exists($fileFullName)){
@@ -98,22 +102,18 @@ class IndexController extends Action
 
     public function deleteAction()
     {
-        $service = $this->getService('book');
-        $book    = $service->getBookByIdAndUser($this->getRequest());
+        /** @var \Models\Book $model */
+        $model = $this->getModel('book');
+        $book    = $model->getBookByIdAndUser($this->getRequest());
 
         if(!$book instanceof \Entities\Books){
             $this->denyPage();
         }
 
-        $service->doRemove($book);
+        $model->doRemove($book);
 
         $this->addFlashMessage('Книга удалена');
         $this->goBack();
-    }
-
-    public function optionsAction()
-    {
-
     }
 }
 

@@ -4,19 +4,14 @@
             <a href="{$this->url([], 'home')}">Home</a>
         </li>
 
-        {* <li><a href="#">Войти</a></li>
-        <li><a href="#">Зарегистрироваться</a></li>
-        <li {if Task_Main::checkUrl(['action' => 'index', 'controller' => 'authors'])}class="active"{/if}>
-            <a href="{$this->url([], 'authors')}">Авторы</a>
+        <li class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Опции <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="{$this->url([], 'authors')}">Авторы</a></li>
+                <li class="divider"></li>
+                <li><a href="{$this->url([], 'genres')}">Жанры</a></li>
+            </ul>
         </li>
-
-        <li {if Task_Main::checkUrl(['action' => 'index', 'controller' => 'genres'])}class="active"{/if}>
-            <a href="{$this->url([], 'genres')}">Жанры</a>
-        </li>*}
-        <li {if $this->checkUrl(['action' => 'options', 'controller' => 'index'])}class="active"{/if}>
-            <a href="{$this->url([], 'options')}">Опции</a>
-        </li>
-
 
         {if $this->auth()->hasIdentity()}
             <li {if $this->checkUrl(['action' => 'logout', 'controller' => 'auth'])}class="active"{/if}>

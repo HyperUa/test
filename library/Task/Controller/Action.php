@@ -27,6 +27,30 @@ class Action extends ZFAction
         \Task\JsInit::getInstance()->addMethod('Task.Events.init');
     }
 
+    public function showFlashMessageWithoutReload()
+    {
+        $this->view->flashMessenger = $this->_helper->flashMessenger->getCurrentMessages();
+        $this->_helper->flashMessenger->clearCurrentMessages();
+    }
+
+    /**
+     * @return \Task\ModelManager
+     */
+    public function getModelManager()
+    {
+        return $this->getManager()->getModelManager();
+    }
+
+
+    public function getModel($model)
+    {
+        return $this->getModelManager()->getModel($model);
+    }
+
+    public function getJsInit()
+    {
+        return \Task\JsInit::getInstance();
+    }
 
     public function denyPage()
     {

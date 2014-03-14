@@ -15,21 +15,34 @@ use Zend_Auth;
  */
 class Auth extends Zend_Controller_Plugin_Abstract
 {
+
+    private $default = array(
+        'module' => 'default',
+        'controller' => 'index',
+        'action' => 'index',
+    );
+
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
         /**
          * Check if Authorize or Auth Controller
          * Check allowed Url for Non regist users
          */
-        if(!Zend_Auth::getInstance()->hasIdentity() && !$this->checkAllowedUrls($request)){
+        try{
+            if(!Zend_Auth::getInstance()->hasIdentity() && !$this->checkAllowedUrls($request) && $request->getControllerName() != 'error'){
 
-            //Check if Action Exist
-            if($this->actionExists($request)){
-                $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
-                //$params = array('url' => urlencode($request->getRequestUri()));
-                $params = array();
-                $redirector->gotoRoute($params, 'login');
+                //Check if Action Exist
+                if($this->actionExists($request)){
+                    $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
+                    //$params = array('url' => urlencode($request->getRequestUri()));
+                    $params = array();
+                    $redirector->gotoRoute($params, 'login');
+                }
             }
+        }catch (\Zend_Exception $e){
+            $request
+                ->setControllerName($this->default['controller'])
+                ->setActionName($this->default['action']);
         }
 
         return;
@@ -38,13 +51,10 @@ class Auth extends Zend_Controller_Plugin_Abstract
 
     public function checkAllowedUrls(Zend_Controller_Request_Abstract $request)
     {
-        //Get Allowed Conf
-        $frontController = Zend_Controller_Front::getInstance();
-        $config          = $frontController->getParam("bootstrap")->getOption('allowedurl');
 
-        if(!is_array($config)) {
-            return false;
-        }
+        //Get Allowed Conf
+        $service = \Task\ServiceManager::getInstance()->getConfigManager();
+        $config = $service->getConfig('allowedurl', 'allowedurl')->toArray();
 
         $controllerName  = $request->getControllerName();
         $actionName      = $request->getActionName();

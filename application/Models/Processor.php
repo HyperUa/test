@@ -39,4 +39,9 @@ abstract class Processor
     {
         return \Task\ServiceManager::getInstance();
     }
+
+    protected function getModel($model)
+    {
+        return $this->getServiceManager()->getModel($model);
+    }
 }

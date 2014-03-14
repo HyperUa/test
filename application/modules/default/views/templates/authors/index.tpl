@@ -4,7 +4,9 @@
 
     {if $hasAuth}
         <div class="add_new">
-            <a href="{$this->url([], 'author_add')}">Добавить</a>
+            <a title="Добавить нового автора" href="{$this->url([], 'author_add')}">
+                <i class="icon-large icon-plus-sign"></i>
+            </a>
         </div>
     {/if}
 
@@ -18,15 +20,28 @@
                 </div>
 
                 {if $hasAuth}
-                    <div class="right-col">
-                        <ul class="inline-list">
-                            <li>
-                                <a href="{$this->url(['action' => 'edit', 'id' => $author->getId()], 'author_opt')}">Edit</a>
-                            </li>
-                            <li>
-                                <a href="{$this->url(['action' => 'delete', 'id' => $author->getId()], 'author_opt')}">Delete</a>
-                            </li>
-                        </ul>
+                    <div title="Опции" class="options">
+                        <i class="icon-large icon-settings"></i>
+
+                        <div class="options-list">
+
+                            <div class="option">
+                                <a title="Редактировать"
+                                   href="{$this->url(['action' => 'edit', 'id' => $author->getId()], 'author_opt')}">
+                                    <i class="icon-large icon-edit"></i>
+                                    Edit
+                                </a>
+                            </div>
+
+                            <div class="option">
+                                <a class="use_modal_confirm" title="Удалить"
+                                   href="{$this->url(['action' => 'delete', 'id' => $author->getId()], 'author_opt')}">
+                                    <i class="icon-large icon-remove"></i>
+                                    Delete
+                                </a>
+                            </div>
+
+                        </div>
                     </div>
                 {/if}
             </li>

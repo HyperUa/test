@@ -9,20 +9,21 @@ class GenresController extends Action
     {
         $page = $this->getParam('page', 1);
 
-        $pagerfanta = $this->getService('genre')->getGenresList($page);
+        $pagerfanta = $this->getModel('genre')->getGenresList($page);
         $this->view->pagerfanta = $pagerfanta;
 
-        \Task\JsInit::getInstance()->addMethod('Task.Paginator.initAjax', '.row.marketing');
+        \Task\JsInit::getInstance()->addMethod('Task.Paginator.initAjax', '.container > .marketing');
     }
 
 
     public function addAction()
     {
-        $service = $this->getService('genre');
-        $genre    = $service->createNewEntity();
+        /** @var \Models\Author $model */
+        $model = $this->getModel('genre');
+        $genre    = $model->createNewEntity();
 
         // Get form with
-        $form = $service->getForm($genre, $service::ADD);
+        $form = $model->getForm($genre, $model::ADD);
 
         // Check Valid
         if ($this->getRequest()->isPost()) {
@@ -32,7 +33,7 @@ class GenresController extends Action
             if ($form->isValid($formData)) {
 
                 // Set values
-                $service->editGenre($genre, $form, $service::ADD);
+                $model->editGenre($genre, $form, $model::ADD);
 
                 $this->addFlashMessage('Жанр был добавлен');
                 $this->gotoRoute(array(), 'genres');
@@ -46,11 +47,13 @@ class GenresController extends Action
     public function editAction()
     {
         $id = $this->getParam('id');
-        $service = $this->getService('genre');
-        $genre    = $service->getGenreById($id);
+
+        /** @var \Models\Author $model */
+        $model = $this->getModel('genre');
+        $genre    = $model->getGenreById($id);
 
         // Get form with
-        $form = $service->getForm($genre, $service::EDIT);
+        $form = $model->getForm($genre, $model::EDIT);
 
         // Check Valid
         if ($this->getRequest()->isPost()) {
@@ -60,7 +63,7 @@ class GenresController extends Action
             if ($form->isValid($formData)) {
 
                 // Set values
-                $service->editGenre($genre, $form, $service::EDIT);
+                $model->editGenre($genre, $form, $model::EDIT);
 
                 $this->addFlashMessage('Жанр был отредактирован');
                 $this->gotoRoute(array(), 'genres');
@@ -74,10 +77,12 @@ class GenresController extends Action
     public function deleteAction()
     {
         $id = $this->getParam('id');
-        $service = $this->getService('genre');
-        $genre    = $service->getGenreById($id);
 
-        $service->doRemove($genre);
+        /** @var \Models\Author $model */
+        $model = $this->getModel('genre');
+        $genre    = $model->getGenreById($id);
+
+        $model->doRemove($genre);
 
         $this->addFlashMessage('Жанр удален');
         $this->goBack();

@@ -10,9 +10,10 @@ use Zend_Exception;
 Class Form extends Zend_Form
 {
     public $formDecorators = array(
+        'Errors',
         'FormElements',
         array(
-            'HtmlTag',
+            'Form',
             array(
                 'tag' => 'table',
                 'class' => 'form-table'

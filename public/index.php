@@ -31,8 +31,8 @@ if(APPLICATION_ENV == 'development'){
 /** Zend_Application */
 //require_once 'Zend/Application.php';
 $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV, true);
-$config->merge(new Zend_Config_Ini(APPLICATION_PATH . '/configs/routes.ini', null, array()));
-$config->merge(new Zend_Config_Ini(APPLICATION_PATH . '/configs/allowedurl.ini'));
+$config->merge(new Zend_Config_Ini(APPLICATION_PATH . '/configs/manager/routes.ini', null, array()));
+//$config->merge(new Zend_Config_Ini(APPLICATION_PATH . '/configs/allowedurl.ini'));
 
 
 // Create application, bootstrap, and run

@@ -37,16 +37,24 @@
             },
 
             options: function(){
+                var options = $('.options');
 
-                $('.options').off()
-                    .on('mouseover', function(){
-                        el = $(this);
-                        el.addClass('active');
-                    })
-                    .on('mouseout', function(){
-                        el = $(this);
-                        el.removeClass('active');
-                    })
+                options.find('> i').off()
+                    .on('click', function(){
+                        var el = $(this).parent();
+                        var list = el.find('.options-list');
+
+                        if(el.hasClass('active')){
+                            list.fadeOut(100);
+                            el.removeClass('active');
+                        }else{
+                            options.removeClass('active');
+                            options.find('.options-list').hide();
+
+                            list.fadeIn(300);
+                            el.addClass('active');
+                        }
+                    });
             }
         },
 
@@ -68,6 +76,23 @@
                     return false;
                 })
             }
+        },
+
+        Modal:{
+
+            confirmDelete: function(elements){
+                elements.confirm({
+                    title: 'Удаление',
+                    text: 'Вы действительно хотите удалить?',
+                    confirmButton: "Удалить",
+                    cancelButton: "Не удалять"
+                });
+            }
+        },
+
+
+        init: function(){
+            Task.Modal.confirmDelete($("a.use_modal_confirm"));
         }
     }
 

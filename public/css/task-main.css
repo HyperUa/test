@@ -64,13 +64,31 @@ body {
     font-size: 20px;
     margin: 0 0 15px;
 }
-#messanger p {
-    margin: 10px 0;
+.col-lg-12 > ul {
+    margin-top: 25px;
+}
+.form-page {
+    margin: 0 auto;
+    width: 280px;
 }
 
 .add_new {
+    border-radius: 4px;
     float: right;
-    line-height: 79px;
+    height: 35px;
+    margin-top: 22px;
+    width: 40px;
+}
+.add_new:hover{
+    background-color: #EEEEEE;
+}
+.add_new .icon-large.icon-plus-sign {
+    background-position: -131px -235px !important;
+    height: 35px;
+    width: 40px;
+}
+.add_new > a {
+    display: block;
 }
 ul {
     list-style: none outside none;
@@ -120,11 +138,16 @@ ul li.inline-list{
     min-width: 30px;
     text-align: center;
     display: block;
+    text-decoration: none;
 }
 .pagerfanta nav a {
     display: block;
     min-width: 30px;
     text-align: center;
+}
+.pagerfanta nav a:hover{
+    background-color: #EEEEEE;
+    color: #428BCA;
 }
 
 
@@ -195,6 +218,7 @@ ul li.inline-list{
 }
 
 
+/* Options in list */
 .task_list {
     position: relative;
     border-bottom: 1px solid #999999;
@@ -202,46 +226,53 @@ ul li.inline-list{
     overflow: hidden;
     padding-bottom: 10px;
 }
-.options {
-    background-color: #FF0000;
-    height: 30px;
-    position: absolute;
-    right: 10px;
-    text-indent: -9999px;
-    top: 5px;
-    width: 30px;
-}
-.options.active{
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom: 0 solid;
-}
-.options .options-list {
-    background: none repeat scroll 0 0 #EEEEEE;
-    border: 1px solid #D3D3D3;
-    border-radius: 4px 0 4px 4px;
-    display: block;
-    padding: 3px 10px;
-    position: absolute;
-    right: -1px;
-    text-indent: 0;
-    top: 29px;
-    display: none;
-}
-.options-list:after {
-    border-top: 1px solid #EEEEEE;
-    content: "";
+.task_list .options{
     position: absolute;
     right: 0;
-    top: -1px;
-    width: 29px;
+    top: 2px;
 }
-.options.active .options-list{
+.task_list .options > i{
+    border-radius: 4px;
+}
+.task_list .options > i:hover{
+    background-color: #EEEEEE;
+}
+.task_list .options.active > i{
+    background-color: #EEEEEE;
+    border-radius: 0 4px 4px 0;
+}
+.task_list .options i,
+.task_list .options .option,
+.task_list .options .option > a{
+    width: 40px;
+    height: 35px;
     display: block;
 }
-.options .options-list a{display:block}
-.options .options-list a:hover{
-    color: #999999;
+.task_list .options > i,
+.task_list .options .option{
+    float: right;
+}
+.task_list .options .option{
+
+}
+.task_list .options .options-list {
+    border-radius: 4px 0 0 4px;
+    background-color: #EEEEEE;
+    float: left;
+    overflow: hidden;
+    display: none;
+}
+.task_list .options.active .options-list{
+    /*display: block;*/
+}
+.task_list .options i.icon-large.icon-edit{background-position: -84px -1082px !important;}
+.task_list .options i.icon-large.icon-remove{background-position: -131px -487px !important;}
+.task_list .options i.icon-large.icon-settings{background-position: -177px -1146px !important;}
+.task_list .options i.icon-large.icon-download{background-position: -131px -595px !important;}
+
+.task_list .options .option i:hover,
+.task_list .options.active > i:hover{
+    background-color: #428BCA;
 }
 
 
@@ -272,4 +303,24 @@ form .block_element > label {
 .registr_description {
     margin: 15px 0;
     text-indent: 5px;
+}
+
+
+/* Flash Mess */
+#messanger .messages {
+    background-color: #EEEEEE;
+    border-radius: 4px;
+    color: #428BCA;
+    margin-top: 20px;
+    padding: 10px;
+}
+#messanger p {
+    margin: 0;
+    padding: 0;
+}
+#messanger .messages span {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 4px;
+    vertical-align: top;
 }

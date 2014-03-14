@@ -1,22 +1,22 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-11 08:40:54
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-14 10:16:40
          compiled from "/home/myproj/webapp/application/modules/default/views/templates/index/index.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:1405752683530764b9049bf5-33655909%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:9256236895322d4e3673ba1-69218007%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '68e17a3f484a291fd9a1142b207b906dd8e74b89' => 
     array (
       0 => '/home/myproj/webapp/application/modules/default/views/templates/index/index.tpl',
-      1 => 1394527252,
+      1 => 1394792176,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '1405752683530764b9049bf5-33655909',
+  'nocache_hash' => '9256236895322d4e3673ba1-69218007',
   'function' => 
   array (
   ),
   'version' => 'Smarty-3.1-DEV',
-  'unifunc' => 'content_530764b91327e8_12246374',
+  'unifunc' => 'content_5322d4e377f6e9_74248477',
   'variables' => 
   array (
     'this' => 0,
@@ -29,7 +29,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_530764b91327e8_12246374')) {function content_530764b91327e8_12246374($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['hasAuth'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->auth()->hasIdentity(), null, 0);?>
+<?php if ($_valid && !is_callable('content_5322d4e377f6e9_74248477')) {function content_5322d4e377f6e9_74248477($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['hasAuth'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->auth()->hasIdentity(), null, 0);?>
 <?php $_smarty_tpl->tpl_vars['id'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->auth()->getIdentity(), null, 0);?>
 
 
@@ -37,8 +37,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 
     <div class="add_new">
         <?php if ($_smarty_tpl->tpl_vars['hasAuth']->value) {?>
-            <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array(),'book_add');?>
-">Добавить</a>
+            <a title="Добавить новую книгу" href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array(),'book_add');?>
+">
+                <i class="icon-large icon-plus-sign"></i>
+            </a>
         <?php }?>
     </div>
 
@@ -56,30 +58,42 @@ $_smarty_tpl->tpl_vars['book']->_loop = true;
 </h4>
 
                 <?php if ($_smarty_tpl->tpl_vars['hasAuth']->value) {?>
-                    <div class="options ui-state-default ui-corner-all">
+                    <div title="Опции" class="options">
+                        <i class="icon-large icon-settings"></i>
+
                         <div class="options-list">
+
                             <?php if ($_smarty_tpl->tpl_vars['id']->value==$_smarty_tpl->tpl_vars['book']->value->getUser()->getId()) {?>
                                 <div class="option">
-                                    <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'delete'),'book_opt');?>
-">Delete</a>
-                                </div>
-
-                                <div class="option" title=".ui-icon-wrench">
-                                    <a title="Редактировать" href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
-"></a>
-                                </div>
-
-                                <div class="option">
-                                    <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
-">Edit</a>
+                                    <a title="Редактировать"
+                                       href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'edit'),'book_opt');?>
+">
+                                        <i class="icon-large icon-edit"></i>
+                                        Edit
+                                    </a>
                                 </div>
                             <?php }?>
+
                             <div class="option">
-                                <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'download'),'book_opt');?>
-">Download</a>
+                                <a title="Скачать"
+                                   href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'download'),'book_opt');?>
+">
+                                    <i class="icon-large icon-download"></i>
+                                    Download
+                                </a>
                             </div>
+
+                            <?php if ($_smarty_tpl->tpl_vars['id']->value==$_smarty_tpl->tpl_vars['book']->value->getUser()->getId()) {?>
+                                <div class="option">
+                                    <a class="use_modal_confirm" title="Удалить"
+                                       href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('id'=>$_smarty_tpl->tpl_vars['book']->value->getId(),'action'=>'delete'),'book_opt');?>
+">
+                                        <i class="icon-large icon-remove"></i>
+                                        Delete
+                                    </a>
+                                </div>
+                            <?php }?>
                         </div>
-                        <span class="ui-icon ui-icon-wrench"></span>
                     </div>
                 <?php }?>
 

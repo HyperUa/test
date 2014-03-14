@@ -6,18 +6,25 @@ use Entities\Users;
 use Task\Auth\Doctrine\Adapter as AuthAdapter;
 use Forms\Login as Login_Form;
 use Forms\Auth as Auth_Form;
+use Zend_Auth;
 
 
 Class User extends Processor
 {
     protected $identityUser;
 
+    /**
+     * @return Users
+     */
     public function createNewEntity()
     {
         return new Users();
     }
 
-
+    /**
+     * @param array $params
+     * @return AuthAdapter
+     */
     public function getAuthAdapter(array $params)
     {
         return new AuthAdapter($params['login'], $params['password']);
@@ -47,6 +54,7 @@ Class User extends Processor
     /**
      * @param $login
      * @param $password
+     * @param bool $isMakeHash
      * @return bool
      */
     public function login($login, $password, $isMakeHash = true)
@@ -59,7 +67,7 @@ Class User extends Processor
             )
         );
 
-        $auth = \Zend_Auth::getInstance();
+        $auth = Zend_Auth::getInstance();
         $result = $auth->authenticate($adapter);
 
         if ($result->isValid()) {
@@ -71,15 +79,24 @@ Class User extends Processor
 
     public function logout()
     {
-        \Zend_Auth::getInstance()->clearIdentity();
+        Zend_Auth::getInstance()->clearIdentity();
     }
 
+    /**
+     * @param $string
+     * @param null $salt
+     * @return string
+     */
     public function makeHash($string, $salt = null){
         $salt = $salt == null ? 'some salt': $salt;
 
-        return md5(md5($string) + $salt);
+        return md5(md5($string) . $salt);
     }
 
+    /**
+     * @param \Zend_Form $form
+     * @return Users
+     */
     public function addUser(\Zend_Form $form)
     {
         $user = $this->createNewEntity();
@@ -99,8 +116,8 @@ Class User extends Processor
      */
     public function getIdentityUser()
     {
-        if($this->identityUser == null && \Zend_Auth::getInstance()->hasIdentity()){
-            $authId = \Zend_Auth::getInstance()->getIdentity();
+        if($this->identityUser == null && Zend_Auth::getInstance()->hasIdentity()){
+            $authId = Zend_Auth::getInstance()->getIdentity();
             $this->identityUser = $this->getEntityManager()->getRepository('Entities\Users')->find($authId);
         }
 

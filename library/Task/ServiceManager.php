@@ -4,12 +4,12 @@ namespace Task;
 
 class ServiceManager
 {
-    protected static $service;
+    private static $service;
 
-    protected function __construct()
+    private function __construct()
     {}
 
-    protected function __clone()
+    private function __clone()
     {}
 
     public static function getInstance()
@@ -34,7 +34,7 @@ class ServiceManager
         if(self::$service == null){
             $sm = \Zend_Registry::getInstance()->get('servicemanager');
             if(!$sm instanceof \Pimple){
-                throw new \Zend_Exception('Service Manager not found', 500);
+                throw new \Zend_Exception('Service Manager не найден');
             }
             self::$service = $sm;
         }
@@ -63,5 +63,27 @@ class ServiceManager
     public function getEntityManager()
     {
         return $this->getService('em');
+    }
+
+    /**
+     * @return \Task\ConfigManager
+     */
+    public function getConfigManager()
+    {
+        return $this->getService('config');
+    }
+
+    /**
+     * @return \Task\ModelManager
+     */
+    public function getModelManager()
+    {
+        return $this->getService('modelManager');
+    }
+
+
+    public function getModel($model)
+    {
+        return $this->getModelManager()->getModel($model);
     }
 }

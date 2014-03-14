@@ -1,22 +1,20 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-11 08:40:28
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-14 10:16:46
          compiled from "/home/myproj/webapp/application/modules/default/views/templates/authors/index.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:175857480530c61d9c1b760-24199012%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:17148956315322d70e09f109-67360028%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '5c7e1229442bd58134a430c413ff77bc680c0725' => 
     array (
       0 => '/home/myproj/webapp/application/modules/default/views/templates/authors/index.tpl',
-      1 => 1394527226,
+      1 => 1394715654,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '175857480530c61d9c1b760-24199012',
+  'nocache_hash' => '17148956315322d70e09f109-67360028',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1-DEV',
-  'unifunc' => 'content_530c61d9cf2f53_91642426',
   'variables' => 
   array (
     'this' => 0,
@@ -25,15 +23,19 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'author' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1-DEV',
+  'unifunc' => 'content_5322d70e1454b1_29683260',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_530c61d9cf2f53_91642426')) {function content_530c61d9cf2f53_91642426($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['hasAuth'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->auth()->hasIdentity(), null, 0);?>
+<?php if ($_valid && !is_callable('content_5322d70e1454b1_29683260')) {function content_5322d70e1454b1_29683260($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['hasAuth'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->auth()->hasIdentity(), null, 0);?>
 
 <div class="col-lg-12">
 
     <?php if ($_smarty_tpl->tpl_vars['hasAuth']->value) {?>
         <div class="add_new">
-            <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array(),'author_add');?>
-">Добавить</a>
+            <a title="Добавить нового автора" href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array(),'author_add');?>
+">
+                <i class="icon-large icon-plus-sign"></i>
+            </a>
         </div>
     <?php }?>
 
@@ -52,17 +54,30 @@ $_smarty_tpl->tpl_vars['author']->_loop = true;
                 </div>
 
                 <?php if ($_smarty_tpl->tpl_vars['hasAuth']->value) {?>
-                    <div class="right-col">
-                        <ul class="inline-list">
-                            <li>
-                                <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('action'=>'edit','id'=>$_smarty_tpl->tpl_vars['author']->value->getId()),'author_opt');?>
-">Edit</a>
-                            </li>
-                            <li>
-                                <a href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('action'=>'delete','id'=>$_smarty_tpl->tpl_vars['author']->value->getId()),'author_opt');?>
-">Delete</a>
-                            </li>
-                        </ul>
+                    <div title="Опции" class="options">
+                        <i class="icon-large icon-settings"></i>
+
+                        <div class="options-list">
+
+                            <div class="option">
+                                <a title="Редактировать"
+                                   href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('action'=>'edit','id'=>$_smarty_tpl->tpl_vars['author']->value->getId()),'author_opt');?>
+">
+                                    <i class="icon-large icon-edit"></i>
+                                    Edit
+                                </a>
+                            </div>
+
+                            <div class="option">
+                                <a class="use_modal_confirm" title="Удалить"
+                                   href="<?php echo $_smarty_tpl->tpl_vars['this']->value->url(array('action'=>'delete','id'=>$_smarty_tpl->tpl_vars['author']->value->getId()),'author_opt');?>
+">
+                                    <i class="icon-large icon-remove"></i>
+                                    Delete
+                                </a>
+                            </div>
+
+                        </div>
                     </div>
                 <?php }?>
             </li>

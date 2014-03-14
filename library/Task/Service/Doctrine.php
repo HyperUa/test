@@ -9,7 +9,7 @@ Class Doctrine
 {
     public function getEntityManager()
     {
-        $db_config  = new Zend_Config_Ini(APPLICATION_PATH . '/configs/db.ini', 'doctrine');
+        $db_config = \Task\ServiceManager::getInstance()->getConfigManager()->getConfig('db', 'doctrine');
         $connect = $db_config->conn->toArray();
 
         $classLoader = new \Doctrine\Common\ClassLoader(

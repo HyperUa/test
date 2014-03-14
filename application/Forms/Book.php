@@ -46,7 +46,8 @@ class Book extends Form
 
     public function init()
     {
-        $upload_path = \Zend_Registry::get('config')->upload_path;
+        $upload_path = $this->getService('config')->getConfig('uploadpath')->books;
+
 
         $this
             ->setMethod('post')

@@ -5,12 +5,17 @@
         <title>Test Task</title>
 
         <link rel="stylesheet" href="/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/css/smoothness/jquery-ui-1.10.4.custom.min.css" >
         <link rel="stylesheet" href="/css/task-main.css">
+        <link rel="stylesheet" href="/css/bootstrap.icon-large.min.css">
 
 
         <script src="/js/jquery-1.11-min.js"></script>
         <script src="/js/task.js"></script>
+
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/jquery.confirm.min.js"></script>
+        <script src="/js/run_prettify.js"></script>
+
 
         {*Form Styler*}
         <link rel="stylesheet" href="/css/jquery.formstyler.css">

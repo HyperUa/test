@@ -40,7 +40,6 @@ class Book extends Processor
         }
         $form->getElement('submit')->setLabel($type);
 
-
         return $form;
     }
 
@@ -53,7 +52,7 @@ class Book extends Processor
      */
     public function editBook(Entities\Books $book, \Zend_Form $form, $type)
     {
-        $user = $this->getService('user')->getIdentityUser();
+        $user = $this->getModel('user')->getIdentityUser();
         $book->setName($form->getValue('name'));
         $book->setUser($user);
 
@@ -176,7 +175,6 @@ class Book extends Processor
         );
     }
 
-
     /**
      * Remove Book
      * @param Entities\Books $book
@@ -188,18 +186,27 @@ class Book extends Processor
         $em->flush();
     }
 
-
     /**
-     * Get Book Path by User
-     *
-     * @param Entities\Users $user
+     *  Get Book Path by User
+     * @param Entities\Users|int $user
+     * @param bool $isFull
      * @return string
      */
-    public function getBookPath(\Entities\Users $user)
+    public function getBookPath($user, $isFull = true)
     {
-        return BASE_PATH . \Zend_Registry::get('config')->upload_path . 'User_' . $user->getId() . '/';
-    }
+        $path = $this->getService('config')->getConfig('uploadpath')->books;
 
+        if($user instanceof \Entities\Users){
+            $path .= 'User_'.$user->getId().'/';
+        }else{
+            $path .= 'User_'.$user.'/';
+        }
+
+        if($isFull){
+            return BASE_PATH . $path;
+        }
+        return $path;
+    }
 
     /**
      * @param int $page

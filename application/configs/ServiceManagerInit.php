@@ -2,14 +2,20 @@
 
 class ServiceManagerInit
 {
+    private $bootstrap;
 
-    public function __construct()
+    public function __construct(\Zend_Application_Bootstrap_Bootstrap $bootstrap)
     {
+        $this->bootstrap = $bootstrap;
         $this->init();
     }
 
     public function init()
     {
+        //echo $this->bootstrap->getOption('manager');
+       // d($this->bootstrap->getOption('manager'));
+       // d();
+
         $pimple = new Pimple;
 
         // Register Entity Manager
@@ -18,26 +24,15 @@ class ServiceManagerInit
             return $doctrine->getEntityManager();
         };
 
-        $pimple['book'] = function ($c){
-            return new \Models\Book($c);
+        $config = $this->bootstrap->getOptions();
+        $pimple['config'] = function () use ($config){
+            return new \Task\Service\ConfigManager($config);
         };
 
-        $pimple['genre'] = function ($c){
-            return new \Models\Genre($c);
+        $pimple['modelManager'] = function (){
+            return new \Task\Service\ModelManager();
         };
 
-        $pimple['author'] = function ($c){
-            return new \Models\Author($c);
-        };
-
-        $pimple['user'] = function ($c){
-            return new \Models\User($c);
-        };
-
-        /**
-         * @param $c
-         * @return \Task\Service\Paginator
-         */
         $pimple['paginator'] = function ($c){
             return new \Task\Service\Paginator($c);
         };

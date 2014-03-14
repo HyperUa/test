@@ -18,7 +18,8 @@ class Login extends Form
     {
         $this
             ->setMethod('post')
-            ->setName('login')// ->setDecorators($this->formDecorators)
+            ->setName('login')//
+            //->setDecorators($this->formDecorators)
         ;
 
         $login = new Zend_Form_Element_Text('login');

@@ -13,8 +13,9 @@ class AuthController extends Action
             $this->goToHome();
         }
 
-        $service = $this->getService('user');
-        $form = $service->getLoginForm();
+        /** @var \Models\User $service */
+        $model = $this->getModel('user');
+        $form = $model->getLoginForm();
 
         // Check Valid
         if ($this->getRequest()->isPost()) {
@@ -24,14 +25,15 @@ class AuthController extends Action
             if ($form->isValid($formData)) {
 
                 // Set values
-                if($service->login($form->getValue('login'), $form->getValue('password'))){
+                if($model->login($form->getValue('login'), $form->getValue('password'))){
 
                     if(($url = $this->getParam('url')) !== null){
-                        $this->_redirect(urldecode($url));
+                        $this->redirect(urldecode($url));
                     }
                     $this->goToHome();
                 }else{
                     $this->addFlashMessage('Логин или пароль неверный');
+                    $this->showFlashMessageWithoutReload();
                 }
             }
         }
@@ -42,8 +44,9 @@ class AuthController extends Action
 
     public function logoutAction()
     {
-        $service = $this->getService('user');
-        $service->logout();
+        /** @var \Models\User $service */
+        $model = $this->getModel('user');
+        $model->logout();
 
         $this->goToHome();
     }
@@ -51,8 +54,9 @@ class AuthController extends Action
 
     public function registrationAction()
     {
-        $service = $this->getService('user');
-        $form = $service->getAuthForm();
+        /** @var \Models\User $service */
+        $model = $this->getModel('user');
+        $form  = $model->getAuthForm();
 
         // Check Valid
         if ($this->getRequest()->isPost()) {
@@ -61,13 +65,13 @@ class AuthController extends Action
 
             if ($form->isValid($formData)) {
 
-                $user = $service->addUser($form);
+                $user = $model->addUser($form);
 
                 // Set values
-                if($service->login($user->getLogin(), $user->getPassword(), false)){
+                if($model->login($user->getLogin(), $user->getPassword(), false)){
                     $this->goToHome();
                 }else{
-                    $this->addFlashMessage('Что-то пошло не так!');
+                    $form->getElement('login')->setError('Что-то пошло не так!');
                 }
             }
         }

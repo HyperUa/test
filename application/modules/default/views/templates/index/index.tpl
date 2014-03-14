@@ -6,7 +6,9 @@
 
     <div class="add_new">
         {if $hasAuth}
-            <a href="{$this->url([], 'book_add')}">Добавить</a>
+            <a title="Добавить новую книгу" href="{$this->url([], 'book_add')}">
+                <i class="icon-large icon-plus-sign"></i>
+            </a>
         {/if}
     </div>
 
@@ -19,26 +21,39 @@
                 <h4>{$book->getHTMLName()}</h4>
 
                 {if $hasAuth}
-                    <div class="options ui-state-default ui-corner-all">
+                    <div title="Опции" class="options">
+                        <i class="icon-large icon-settings"></i>
+
                         <div class="options-list">
+
                             {if $id == $book->getUser()->getId()}
                                 <div class="option">
-                                    <a href="{$this->url(['id' => $book->getId(), 'action' => 'delete'], 'book_opt')}">Delete</a>
-                                </div>
-
-                                <div class="option" title=".ui-icon-wrench">
-                                    <a title="Редактировать" href="{$this->url(['id' => $book->getId(), 'action' => 'edit'], 'book_opt')}"></a>
-                                </div>
-
-                                <div class="option">
-                                    <a href="{$this->url(['id' => $book->getId(), 'action' => 'edit'], 'book_opt')}">Edit</a>
+                                    <a title="Редактировать"
+                                       href="{$this->url(['id' => $book->getId(), 'action' => 'edit'], 'book_opt')}">
+                                        <i class="icon-large icon-edit"></i>
+                                        Edit
+                                    </a>
                                 </div>
                             {/if}
+
                             <div class="option">
-                                <a href="{$this->url(['id' => $book->getId(), 'action' => 'download'], 'book_opt')}">Download</a>
+                                <a title="Скачать"
+                                   href="{$this->url(['id' => $book->getId(), 'action' => 'download'], 'book_opt')}">
+                                    <i class="icon-large icon-download"></i>
+                                    Download
+                                </a>
                             </div>
+
+                            {if $id == $book->getUser()->getId()}
+                                <div class="option">
+                                    <a class="use_modal_confirm" title="Удалить"
+                                       href="{$this->url(['id' => $book->getId(), 'action' => 'delete'], 'book_opt')}">
+                                        <i class="icon-large icon-remove"></i>
+                                        Delete
+                                    </a>
+                                </div>
+                            {/if}
                         </div>
-                        <span class="ui-icon ui-icon-wrench"></span>
                     </div>
                 {/if}
 

@@ -24,7 +24,8 @@ class Auth extends Form
     {
         $this
             ->setMethod('post')
-            ->setName('signup')// ->setDecorators($this->formDecorators)
+            ->setName('signup')
+            //->setDecorators($this->formDecorators)
         ;
 
         $login = new Zend_Form_Element_Text('login');

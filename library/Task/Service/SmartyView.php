@@ -55,7 +55,8 @@ class SmartyView extends \Zend_View_Abstract
      *
      * The method _run() is the only method that needs to be implemented in any subclass of Zend_View_Abstract. It is called automatically within the render() method. My implementation just uses the display() method from Smarty to generate and output the template.
      *
-     * @param string $template
+     * @return mixed|void
+     * @throws \Zend_View_Exception
      */
     protected function _run()
     {

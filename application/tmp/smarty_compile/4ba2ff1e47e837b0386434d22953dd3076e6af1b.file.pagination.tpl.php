@@ -1,6 +1,6 @@
-<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-05 11:59:32
+<?php /* Smarty version Smarty-3.1-DEV, created on 2014-03-14 10:07:31
          compiled from "/home/myproj/webapp/application/modules/default/views/templates/static/pagination.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:790969626530b0fc2bd2b65-31435235%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:17058050725322d4e3ad7be0-51800569%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
@@ -11,20 +11,20 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '790969626530b0fc2bd2b65-31435235',
+  'nocache_hash' => '17058050725322d4e3ad7be0-51800569',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1-DEV',
-  'unifunc' => 'content_530b0fc2cd7bd2_79172918',
   'variables' => 
   array (
     'pagerfanta' => 0,
     'this' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1-DEV',
+  'unifunc' => 'content_5322d4e3af16d3_59165045',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_530b0fc2cd7bd2_79172918')) {function content_530b0fc2cd7bd2_79172918($_smarty_tpl) {?><?php if (isset($_smarty_tpl->tpl_vars['pagerfanta']->value)) {?>
+<?php if ($_valid && !is_callable('content_5322d4e3af16d3_59165045')) {function content_5322d4e3af16d3_59165045($_smarty_tpl) {?><?php if (isset($_smarty_tpl->tpl_vars['pagerfanta']->value)) {?>
     <div class="pagerfanta">
         <?php echo $_smarty_tpl->tpl_vars['this']->value->paginator($_smarty_tpl->tpl_vars['this']->value->pagerfanta);?>
 

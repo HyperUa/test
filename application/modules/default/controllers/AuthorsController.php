@@ -9,20 +9,21 @@ class AuthorsController extends Action
     {
         $page = $this->getParam('page', 1);
 
-        $pagerfanta = $this->getService('author')->getAuthorsList($page);
+        $pagerfanta = $this->getModel('author')->getAuthorsList($page);
         $this->view->pagerfanta = $pagerfanta;
 
-        \Task\JsInit::getInstance()->addMethod('Task.Paginator.initAjax', '.row.marketing');
+        $this->getJsInit()->addMethod('Task.Paginator.initAjax', '.container > .marketing');
     }
 
 
     public function addAction()
     {
-        $service = $this->getService('author');
-        $author  = $service->createNewEntity();
+        /** @var \Models\Author $model */
+        $model = $this->getModel('author');
+        $author  = $model->createNewEntity();
 
         // Get form with
-        $form = $service->getForm($author, $service::ADD);
+        $form = $model->getForm($author, $model::ADD);
 
         // Check Valid
         if ($this->getRequest()->isPost()) {
@@ -32,7 +33,7 @@ class AuthorsController extends Action
             if ($form->isValid($formData)) {
 
                 // Set values
-                $service->editAuthor($author, $form, $service::ADD);
+                $model->editAuthor($author, $form, $model::ADD);
 
                 $this->addFlashMessage('Автор был добавлен');
                 $this->gotoRoute(array(), 'authors');
@@ -46,11 +47,13 @@ class AuthorsController extends Action
     public function editAction()
     {
         $id = $this->getParam('id');
-        $service = $this->getService('author');
-        $author  = $service->getAuthorById($id);
+
+        /** @var \Models\Author $model */
+        $model = $this->getModel('author');
+        $author  = $model->getAuthorById($id);
 
         // Get form with
-        $form = $service->getForm($author, $service::EDIT);
+        $form = $model->getForm($author, $model::EDIT);
 
         // Check Valid
         if ($this->getRequest()->isPost()) {
@@ -60,7 +63,7 @@ class AuthorsController extends Action
             if ($form->isValid($formData)) {
 
                 // Set values
-                $service->editAuthor($author, $form, $service::EDIT);
+                $model->editAuthor($author, $form, $model::EDIT);
 
                 $this->addFlashMessage('Автор был отредактирован');
                 $this->gotoRoute(array(), 'authors');
@@ -74,10 +77,12 @@ class AuthorsController extends Action
     public function deleteAction()
     {
         $id = $this->getParam('id');
-        $service = $this->getService('author');
-        $author  = $service->getAuthorById($id);
 
-        $service->doRemove($author);
+        /** @var \Models\Author $model */
+        $model = $this->getModel('author');
+        $author  = $model->getAuthorById($id);
+
+        $model->doRemove($author);
 
         $this->addFlashMessage('Автор удален');
         $this->goBack();
