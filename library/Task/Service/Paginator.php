@@ -23,16 +23,7 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
  */
 class Paginator
 {
-    protected $container;
     protected $pagerfanta;
-
-    /**
-     * @param \Pimple $container
-     */
-    public function __construct(\Pimple $container)
-    {
-        $this->container  = $container;
-    }
 
     /**
      * @param \Doctrine\ORM\Query $query

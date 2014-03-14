@@ -71,7 +71,8 @@ class AuthController extends Action
                 if($model->login($user->getLogin(), $user->getPassword(), false)){
                     $this->goToHome();
                 }else{
-                    $form->getElement('login')->setError('Что-то пошло не так!');
+                    $this->addFlashMessage('Что-то пошло не так! Попробуйте еще раз');
+                    $this->showFlashMessageWithoutReload();
                 }
             }
         }

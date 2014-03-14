@@ -12,10 +12,6 @@ class ServiceManagerInit
 
     public function init()
     {
-        //echo $this->bootstrap->getOption('manager');
-       // d($this->bootstrap->getOption('manager'));
-       // d();
-
         $pimple = new Pimple;
 
         // Register Entity Manager
@@ -33,8 +29,8 @@ class ServiceManagerInit
             return new \Task\Service\ModelManager();
         };
 
-        $pimple['paginator'] = function ($c){
-            return new \Task\Service\Paginator($c);
+        $pimple['paginator'] = function (){
+            return new \Task\Service\Paginator();
         };
 
         $sm = \Task\ServiceManager::getInstance();
