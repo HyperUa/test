@@ -7,6 +7,7 @@ class IndexController extends Action
 {
     public function indexAction()
     {
+        echo 'Hello world';
         $page = $this->getParam('page', 1);
 
         $pagerfanta = $this->getModel('book')->getBooksList($page);
