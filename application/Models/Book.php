@@ -4,6 +4,7 @@ namespace Models;
 
 use Entities;
 use Forms\Book as Book_Form;
+use Models\Exeption\Book as Book_Exeption;
 
 /**
  * Class Book
@@ -50,61 +51,38 @@ class Book extends Processor
      * @param $type [self::EDIT, self::ADD]
      * @return bool
      */
-    public function editBook(Entities\Books $book, \Zend_Form $form, $type)
+    public function editBook($book, \Zend_Form $form, $type)
     {
+        //throw new \Exception('sdf');
+        //$book = '';
+        if(!$book instanceof \Entities\Books){
+            throw new Book_Exeption('Значение должно пренадлежать \Entities\Books');
+        }
+
         $user = $this->getModel('user')->getIdentityUser();
+
+        if( $form->getValue('name') == ''){
+            throw new Book_Exeption('Название книги не должно быть пустым');
+        }
+
         $book->setName($form->getValue('name'));
         $book->setUser($user);
 
+
         //Genres
         $genres = $form->getValue('genres');
-        //Removing Old Genres
-        $currentGenres = $book->getGenres();
 
-        if ($currentGenres->count() > 0) {
-            foreach ($currentGenres as $currentGenre) {
-                if (in_array($currentGenre->getId(), $genres)) {
-                    unset($genres[array_search($currentGenre->getId(), $genres)]);
-                } else {
-                    $book->removeGenre($currentGenre);
-                }
-            }
-        }
-
-        //Write New Genres
-        foreach ($genres as $genreId) {
-            $genreObj = $this->getEntityManager()->getRepository('Entities\Genres')->find($genreId);
-
-            if ($genreObj instanceof \Entities\Genres) {
-                $book->addGenre($genreObj);
-            }
-        }
+        /** @var  \Models\Genre */
+        $genreModel = $this->getModel('genre');
+        $genreModel->editGenresByBook($book, $genres);
 
 
         //Authors
         $authors = $form->getValue('authors');
 
-        //Removing Old Authors
-        $currentAuthors = $book->getAuthors();
-
-        if ($currentAuthors->count() > 0) {
-            foreach ($currentAuthors as $currentAuthor) {
-                if (in_array($currentAuthor->getId(), $genres)) {
-                    unset($authors[array_search($currentAuthor->getId(), $authors)]);
-                } else {
-                    $book->removeAuthor($currentAuthor);
-                }
-            }
-        }
-
-        //Write New Authors
-        foreach ($authors as $authorId) {
-            $authObj = $this->getEntityManager()->getRepository('Entities\Authors')->find($authorId);
-
-            if ($authObj instanceof \Entities\Authors) {
-                $book->addAuthor($authObj);
-            }
-        }
+        /** @var  Author */
+        $genreModel = $this->getModel('author');
+        $genreModel->editAuthorsByBook($book, $authors);
 
 
         // File

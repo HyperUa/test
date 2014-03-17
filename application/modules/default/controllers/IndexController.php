@@ -7,7 +7,6 @@ class IndexController extends Action
 {
     public function indexAction()
     {
-        echo 'Hello world';
         $page = $this->getParam('page', 1);
 
         $pagerfanta = $this->getModel('book')->getBooksList($page);
@@ -42,10 +41,11 @@ class IndexController extends Action
             }
         }
 
+        $this->getJsInit()->addMethod('Task.Form.Book.init');
         $this->view->form = $form;
     }
 
-
+    // Для примера работы с Эксепшинами
     public function editAction()
     {
         /** @var \Models\Book $model */
@@ -65,15 +65,34 @@ class IndexController extends Action
             $formData = $this->getRequest()->getPost();
 
             if ($form->isValid($formData)) {
+                try {
+                    // Set values
+                    $model->editBook($book, $form, $model::EDIT);
 
-                // Set values
-                $model->editBook($book, $form, $model::EDIT);
-
-                $this->addFlashMessage('Книга была отредактирована');
-                $this->goToHome();
+                    $this->addFlashMessage('Книга была отредактирована');
+                    $this->goToHome();
+                }
+                catch (\Zend_Exception $e) {
+                    $this->addFlashMessage('Zend_Exeption error');
+                    $this->showFlashMessageWithoutReload();
+                }
+                catch (\Models\Exeption\Book $e) {
+                    $this->addFlashMessage('Error in Book Model: '. $e->getMessage());
+                    $this->showFlashMessageWithoutReload();
+                }
+                catch (\Models\Exeption\Genre $e) {
+                    $this->addFlashMessage('Error in Genre Model: '. $e->getMessage());
+                    $this->showFlashMessageWithoutReload();
+                }
+                catch (\Models\Exeption\Author $e) {
+                    $this->addFlashMessage('Error in Author Model: '. $e->getMessage());
+                    $this->showFlashMessageWithoutReload();
+                }
+                // Все остальные отловит фронт контроллер
             }
         }
 
+        $this->getJsInit()->addMethod('Task.Form.Book.init');
         $this->view->form = $form;
     }
 

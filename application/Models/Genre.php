@@ -4,6 +4,7 @@ namespace Models;
 
 use Entities;
 use Forms\Genre as Genre_Form;
+use Models\Exeption\Genre as Genre_Exeption;
 
 /**
  * Class Genre
@@ -102,5 +103,42 @@ class Genre extends Processor
             ->getORMpagerFanta($query, $page, self::COUNT_PER_PAGE);
 
         return $pagerfanta;
+    }
+
+    /**
+     * @param Entities\Books $book
+     * @param array $genres
+     * @throws Exeption\Genre
+     */
+    public function editGenresByBook(\Entities\Books $book, $genres = array())
+    {
+        $currentGenres = $book->getGenres();
+
+        //$genres = array_merge ($genres, array(111));
+
+        if (count($genres) == 0) {
+            throw new Genre_Exeption('Должен быть установлен минимум 1 жанр');
+        }
+
+        if($currentGenres->count() > 0){
+            foreach ($currentGenres as $currentGenre) {
+                if (in_array($currentGenre->getId(), $genres)) {
+                    unset($genres[array_search($currentGenre->getId(), $genres)]);
+                } else {
+                    $book->removeGenre($currentGenre);
+                }
+            }
+        }
+
+        //Write New Genres
+        foreach ($genres as $genreId) {
+            $genreObj = $this->getEntityManager()->getRepository('Entities\Genres')->find($genreId);
+
+            if ($genreObj instanceof \Entities\Genres) {
+                $book->addGenre($genreObj);
+            }else{
+                throw new Genre_Exeption("Жанр, с идентификационным номером $genreId, не был найден");
+            }
+        }
     }
 }

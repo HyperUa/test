@@ -1,4 +1,6 @@
 <div class="form-page">
     <div class="title">Редактирование книги:</div>
-    {$form}
+{$form}
+    {*{$this->render('index/form.tpl')}*}
+
 </div>

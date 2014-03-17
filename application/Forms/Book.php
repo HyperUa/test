@@ -56,7 +56,8 @@ class Book extends Form
 
         // Название
         $name = new Zend_Form_Element_Text('name');
-        $name->setRequired(true)
+        $name
+            //->setRequired(true)
             ->setLabel('Название книги:')
             ->setDecorators($this->elementDecorators)
             ->setAttrib('class', 'col-lg-12')
@@ -68,7 +69,7 @@ class Book extends Form
         if (count($genres) > 0) {
             $inputGenre = new Zend_Form_Element_Multiselect('genres');
             $inputGenre->setLabel('Жанр книги:')
-                ->setRequired(true)
+                //->setRequired(true)
                 ->setAttrib('class', 'col-lg-12')
                 ->setDecorators($this->elementDecorators)
                 //->setErrorMessages(array(self::ERR_EMPTY_GENRE))
@@ -84,7 +85,7 @@ class Book extends Form
         if (count($authors) > 0) {
             $inputAuthor = new Zend_Form_Element_Multiselect('authors');
             $inputAuthor->setLabel('Автор книги:')
-                ->setRequired(true)
+                //->setRequired(true)
                 ->setAttrib('class', 'col-lg-12')
                 ->setDecorators($this->elementDecorators)
                 //->setErrorMessages(array(self::ERR_EMPTY_AUTH))
@@ -99,7 +100,7 @@ class Book extends Form
         $file = new Zend_Form_Element_File('file');
         $file->setLabel('Выберите книгу')
             ->setDestination(BASE_PATH . $upload_path)
-            ->setRequired(false)
+            //->setRequired(false)
             ->setMaxFileSize(1310720)
             ->setDecorators($this->fileDecorator)
             ->setValidators(
